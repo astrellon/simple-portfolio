@@ -21,3 +21,4 @@ const parent = ssrDomDocument.createElement('div');
 render(testVDom, parent);
 
 console.log(parent.toString());
+console.log(testVDom);

@@ -11,7 +11,6 @@ export class SSRDomNodeList implements DomNodeList
 
     public item(index: number): DomNode
     {
-        //throw new Error('Method not implemented.');
         return this.nodes[index];
     }
 }
