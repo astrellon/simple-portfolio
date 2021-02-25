@@ -12,9 +12,14 @@ export class Post extends ClassComponent<Props>
     {
         const { title, contents } = this.props.post;
 
-        return <div>
+        return <div onclick={this.onClick}>
             <h2>{title}</h2>
             <p>{contents}</p>
         </div>
+    }
+
+    private onClick = () =>
+    {
+        alert('Clicked!');
     }
 }

@@ -143,6 +143,11 @@ export class SSRDomElement extends SSRDomNode implements DomElement
             const node = this.childNodes.nodes[i] as SSRDomNode;
             innerHtml += node.toString(prevNode);
         }
+
+        if (this.nodeName === 'EMPTY')
+        {
+            return innerHtml;
+        }
         return `<${this.nodeName}${this.toStringAttributes()}${this.toStringStyle()}>${innerHtml}</${this.nodeName}>`;
     }
 
@@ -175,6 +180,10 @@ export class SSRDomDocument implements DomDocument
     public createElement(type: string): SSRDomElement
     {
         return new SSRDomElement(type);
+    }
+    public createEmpty(): SSRDomElement
+    {
+        return this.createElement('EMPTY');
     }
     public createElementNS(namespace: string, type: string): SSRDomElement
     {
