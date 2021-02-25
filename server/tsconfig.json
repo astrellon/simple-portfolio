@@ -2,7 +2,7 @@
     "compilerOptions": {
         "strict": true,
         "outDir": "./dist/",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "module": "commonjs",
@@ -11,6 +11,8 @@
         "declaration": true,
         "esModuleInterop": true,
         "sourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "jsxFactory": "vdom",
+        "jsx": "react"
     }
 }

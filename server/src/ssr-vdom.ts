@@ -15,9 +15,13 @@ export class SSRDomNodeList implements DomNodeList
     }
 }
 
-export class SSRDomNode implements DomNode
+export abstract class SSRDomNode implements DomNode
 {
     public parentElement: DomElement | null = null;
+
+    public nodeType: number = 0;
+
+    public abstract toString(previousNode?: SSRDomNode): string;
 }
 
 export class SSRDomText extends SSRDomNode implements DomText
@@ -30,8 +34,12 @@ export class SSRDomText extends SSRDomNode implements DomText
         this.nodeValue = nodeValue;
     }
 
-    public toString()
+    public toString(previousNode?: SSRDomNode)
     {
+        if (previousNode instanceof SSRDomText)
+        {
+            return '<!-- -->' + this.nodeValue;
+        }
         return this.nodeValue;
     }
 }
@@ -126,9 +134,16 @@ export class SSRDomElement extends SSRDomNode implements DomElement
         return node;
     }
 
-    public toString()
+    public toString(previousNode?: SSRDomNode)
     {
-        return `<${this.nodeName}${this.toStringAttributes()}${this.toStringStyle()}>${this.childNodes.nodes.map(n => n.toString()).join('')}</${this.nodeName}>`;
+        let innerHtml = '';
+        for (let i = 0; i < this.childNodes.nodes.length; i++)
+        {
+            const prevNode = i > 0 ? this.childNodes.nodes[i - 1] as SSRDomNode: undefined;
+            const node = this.childNodes.nodes[i] as SSRDomNode;
+            innerHtml += node.toString(prevNode);
+        }
+        return `<${this.nodeName}${this.toStringAttributes()}${this.toStringStyle()}>${innerHtml}</${this.nodeName}>`;
     }
 
     public toStringStyle()
