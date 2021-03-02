@@ -9,7 +9,13 @@ interface Props
 
 export const Posts: FunctionalComponent<Props> = (props: Props) =>
 {
+    const { posts } = props;
+    if (!posts)
+    {
+        return null;
+    }
+
     return <div>
-        {props.posts.map(post => <Post key={post.id} post={post} />)};
+        {posts.map(post => <Post key={post.id} post={post} />)};
     </div>
 }

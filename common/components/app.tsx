@@ -11,9 +11,11 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
+    const { categories, posts, selectedCategoryId } = props.state;
+
     return <main>
-        <Navbar categories={props.state.categories} />
-        <Posts posts={props.state.posts} />
+        <Navbar categories={categories} />
+        <Posts posts={posts[selectedCategoryId]} />
         <Footer />
     </main>
 }

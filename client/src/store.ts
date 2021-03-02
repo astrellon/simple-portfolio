@@ -1,10 +1,11 @@
 import DataStore, { Modifier } from "simple-data-store";
-import { State } from "../../common/store";
+import { setStore, State } from "../../common/store";
 
-export const store = new DataStore<State>({
+setStore(new DataStore<State>({
     categories: [],
-    posts: []
-});
+    posts: {},
+    selectedCategoryId: ''
+}));
 
 export function setInitialState(state: State): Modifier<State>
 {

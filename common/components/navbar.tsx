@@ -1,5 +1,5 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
-import { Category } from "../store";
+import { Category, CategoryId, setSelectedCategoryId, store } from "../store";
 
 interface Props
 {
@@ -22,6 +22,10 @@ export class Navbar extends ClassComponent<Props>
 
     private onClickCategory = (e: MouseEvent) =>
     {
-        console.log(e.target);
+        const button = e.target as HTMLButtonElement;
+        const categoryId = button.attributes['data-category-id'].value as CategoryId;
+        console.log(categoryId);
+
+        store.execute(setSelectedCategoryId(categoryId));
     }
 }

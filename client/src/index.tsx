@@ -2,9 +2,9 @@ import './normalize.css';
 import './styles.scss';
 
 import { vdom, render, hydrate } from "simple-tsx-vdom";
-import { State } from "../../common/store";
+import { State, store } from "../../common/store";
 import { App } from "../../common/components/app";
-import { setInitialState, store } from './store';
+import { setInitialState } from './store';
 
 (globalThis as any).__store = store;
 

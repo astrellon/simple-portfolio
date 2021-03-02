@@ -2,10 +2,11 @@ import "array-flat-polyfill";
 import * as fs from "fs";
 import { render, VDom, vdom } from "simple-tsx-vdom";
 import { SSRDomDocument } from "./ssr-vdom";
-import { State } from "../../common/store";
+import { Category, CategoryId, PostState, setPosts, State, store, setStore } from "../../common/store";
 import { App } from "../../common/components/app";
 import { Server } from "./server";
 import { parse } from 'node-html-parser';
+import DataStore from "simple-data-store";
 
 const ssrDomDocument = new SSRDomDocument();
 const ssrVDom = new VDom(ssrDomDocument);
@@ -15,43 +16,49 @@ let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
 const clientHtml = parse(clientFileHtml);
 const rootEl = clientHtml.querySelector('body');
 
-const state: State = {
-        categories: [{
-            id: 'about',
-            title: 'About Me'
+const categories: Category[] = [{
+    id: 'about' as CategoryId,
+    title: 'About Me'
+},
+{
+    id: 'work' as CategoryId,
+    title: 'Previous Work'
+},
+{
+    id: 'projects' as CategoryId,
+    title: 'Personal Projects'
+}];
+
+const posts: PostState[] = [{
+    categoryId: 'projects' as CategoryId,
+    title: 'Title 1!',
+    contents: [
+        {
+            pictures: [],
+            text: 'Paragraph 1'
         },
         {
-            id: 'work',
-            title: 'Previous Work'
-        },
-        {
-            id: 'projects',
-            title: 'Personal Projects'
+            pictures: [],
+            text: 'Paragraph 2'
         }
     ],
-    posts: [{
-        categoryId: 'projects',
-        title: 'Title 1!',
-        contents: [
-            {
-                pictures: [],
-                text: 'Paragraph 1'
-            },
-            {
-                pictures: [],
-                text: 'Paragraph 2'
-            }
-        ],
-        id: ''
-    }]
-};
+    id: ''
+}];
+
+setStore(new DataStore<State>({
+    categories: categories,
+    posts: {},
+    selectedCategoryId: 'projects'
+}));
+
+store.execute(setPosts(posts));
 
 const parent = ssrDomDocument.createEmpty();
-render(vdom(App, {state}), parent);
+render(vdom(App, {state: store.state()}), parent);
 const parsedParent = parse(parent.toString());
 
 const headEl = clientHtml.querySelector('head');
-headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(state)}</script>`);
+headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(store.state())}</script>`);
 
 rootEl.childNodes.splice(0, 0, parsedParent);
 const clientFinal = clientHtml.toString();
