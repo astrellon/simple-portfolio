@@ -12,7 +12,7 @@ interface Props
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
     return <main>
-        <Navbar />
+        <Navbar categories={props.state.categories} />
         <Posts posts={props.state.posts} />
         <Footer />
     </main>

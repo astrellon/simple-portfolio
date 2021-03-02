@@ -2,6 +2,7 @@ import DataStore, { Modifier } from "simple-data-store";
 import { State } from "../../common/store";
 
 export const store = new DataStore<State>({
+    categories: [],
     posts: []
 });
 

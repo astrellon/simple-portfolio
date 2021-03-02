@@ -4,7 +4,7 @@
   "description": "A simple CMS",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts --jsx",
     "buildClient": "rm -rf ./clientDeploy/ && cd ../client && npm run build && cp -r ./deploy ../server/clientDeploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

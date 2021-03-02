@@ -11,24 +11,40 @@ const ssrDomDocument = new SSRDomDocument();
 const ssrVDom = new VDom(ssrDomDocument);
 VDom.current = ssrVDom;
 
-const clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
+let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
 const clientHtml = parse(clientFileHtml);
-const rootEl = clientHtml.querySelector('#root');
+const rootEl = clientHtml.querySelector('body');
 
 const state: State = {
-    posts: [
-        {
-            contents: 'This is the first post',
-            id: '1',
-            title: 'First Post'
+        categories: [{
+            id: 'about',
+            title: 'About Me'
         },
         {
-            contents: 'This is the second post',
-            id: '2',
-            title: 'Second Post'
+            id: 'work',
+            title: 'Previous Work'
+        },
+        {
+            id: 'projects',
+            title: 'Personal Projects'
         }
-    ]
-}
+    ],
+    posts: [{
+        categoryId: 'projects',
+        title: 'Title 1!',
+        contents: [
+            {
+                pictures: [],
+                text: 'Paragraph 1'
+            },
+            {
+                pictures: [],
+                text: 'Paragraph 2'
+            }
+        ],
+        id: ''
+    }]
+};
 
 const parent = ssrDomDocument.createEmpty();
 render(vdom(App, {state}), parent);
@@ -37,7 +53,7 @@ const parsedParent = parse(parent.toString());
 const headEl = clientHtml.querySelector('head');
 headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(state)}</script>`);
 
-rootEl.appendChild(parsedParent);
+rootEl.childNodes.splice(0, 0, parsedParent);
 const clientFinal = clientHtml.toString();
 
 const server = new Server('localhost', 8000);

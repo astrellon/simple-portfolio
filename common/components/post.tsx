@@ -1,5 +1,6 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PostState } from "../store";
+import { PostParagraph } from "./post-paragraph";
 
 interface Props
 {
@@ -14,7 +15,7 @@ export class Post extends ClassComponent<Props>
 
         return <div onclick={this.onClick}>
             <h2>{title}</h2>
-            <p>{contents}</p>
+            <div>{contents.map(content => <PostParagraph content={content} />)}</div>
         </div>
     }
 
