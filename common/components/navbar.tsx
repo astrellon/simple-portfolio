@@ -26,6 +26,7 @@ export class Navbar extends ClassComponent<Props>
         const categoryId = button.attributes['data-category-id'].value as CategoryId;
         console.log(categoryId);
 
+        window.history.pushState({categoryId}, categoryId, `/${categoryId}`);
         store.execute(setSelectedCategoryId(categoryId));
     }
 }

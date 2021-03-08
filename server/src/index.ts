@@ -1,20 +1,13 @@
 import "array-flat-polyfill";
 import * as fs from "fs";
-import { render, VDom, vdom } from "simple-tsx-vdom";
-import { Category, CategoryId, PostState, setPosts, State, store, setStore } from "../../common/store";
-import { App } from "../../common/components/app";
+import { VDom } from "simple-tsx-vdom";
+import { Category, CategoryId, PostState, setPosts, setCategories, setSelectedCategoryId } from "../../common/store";
 import { Server } from "./server";
-import { parse } from 'node-html-parser';
-import DataStore from "simple-data-store";
 import { SSRDomDocument } from "simple-tsx-vdom-ssr";
-
-const ssrDomDocument = new SSRDomDocument();
-const ssrVDom = new VDom(ssrDomDocument);
-VDom.current = ssrVDom;
+import { PageRenderer } from "./page-renderer";
 
 let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
-const clientHtml = parse(clientFileHtml);
-const rootEl = clientHtml.querySelector('body');
+const pageRenderer = new PageRenderer(clientFileHtml);
 
 const categories: Category[] = [{
     id: 'about' as CategoryId,
@@ -45,23 +38,9 @@ const posts: PostState[] = [{
     id: ''
 }];
 
-setStore(new DataStore<State>({
-    categories: categories,
-    posts: {},
-    selectedCategoryId: 'projects'
-}));
-
-store.execute(setPosts(posts));
-
-const parent = SSRDomDocument.emptyElement();
-render(vdom(App, {state: store.state()}), parent);
-const parsedParent = parse(parent.hydrateToString());
-
-const headEl = clientHtml.querySelector('head');
-headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(store.state())}</script>`);
-
-rootEl.childNodes.splice(0, 0, parsedParent);
-const clientFinal = clientHtml.toString();
+pageRenderer.store.execute(setCategories(categories));
+pageRenderer.store.execute(setPosts(posts));
+pageRenderer.store.execute(setSelectedCategoryId(categories[0].id));
 
 const server = new Server('localhost', 8000);
 server.registerRoute('/src', (req, res) =>
@@ -91,12 +70,29 @@ server.registerRoute('/src', (req, res) =>
     });
 });
 
-server.registerRoute('/post', (req, res) =>
+server.registerRoute('/', (req, res) =>
 {
-    res.setHeader("Content-Type", "text/html");
-    res.writeHead(200);
-    res.end(clientFinal);
+    const category = req.url?.substr(1);
+    if (category === '')
+    {
+        res.setHeader("Content-Type", "text/html");
+        res.writeHead(200);
+        res.end(pageRenderer.render({}));
+    }
+    else if (pageRenderer.isCategory(category))
+    {
+        res.setHeader("Content-Type", "text/html");
+        res.writeHead(200);
+        res.end(pageRenderer.render({ selectedCategoryId: category }));
+    }
+    else
+    {
+        res.setHeader("Content-Type", "text/html");
+        res.writeHead(404);
+        res.end('Not found');
+    }
 });
+
 server.start(() =>
 {
     console.log(`Started CMS server on ${server.hostname}:${server.port}`);

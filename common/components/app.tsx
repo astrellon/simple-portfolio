@@ -15,7 +15,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
 
     return <main>
         <Navbar categories={categories} />
-        <Posts posts={posts[selectedCategoryId]} />
+        <Posts category={categories.find(c => c.id === selectedCategoryId)} posts={posts[selectedCategoryId]} />
         <Footer />
     </main>
 }

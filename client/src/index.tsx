@@ -2,7 +2,7 @@ import './normalize.css';
 import './styles.scss';
 
 import { vdom, render } from "simple-tsx-vdom";
-import { State, store } from "../../common/store";
+import { setSelectedCategoryId, State, store } from "../../common/store";
 import { App } from "../../common/components/app";
 import { setInitialState } from './store';
 import { hydrate } from 'simple-tsx-vdom-hydration';
@@ -27,4 +27,14 @@ renderApp(store.state());
 store.subscribeAny((state) =>
 {
     renderApp(state);
+});
+
+window.addEventListener('popstate', (event) =>
+{
+    console.log(event);
+    const stateData = event.state;
+    if (stateData.categoryId)
+    {
+        store.execute(setSelectedCategoryId(stateData.categoryId));
+    }
 });
