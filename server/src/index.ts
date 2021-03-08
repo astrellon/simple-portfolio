@@ -1,12 +1,12 @@
 import "array-flat-polyfill";
 import * as fs from "fs";
 import { render, VDom, vdom } from "simple-tsx-vdom";
-import { SSRDomDocument } from "./ssr-vdom";
 import { Category, CategoryId, PostState, setPosts, State, store, setStore } from "../../common/store";
 import { App } from "../../common/components/app";
 import { Server } from "./server";
 import { parse } from 'node-html-parser';
 import DataStore from "simple-data-store";
+import { SSRDomDocument } from "simple-tsx-vdom-ssr";
 
 const ssrDomDocument = new SSRDomDocument();
 const ssrVDom = new VDom(ssrDomDocument);
@@ -53,9 +53,9 @@ setStore(new DataStore<State>({
 
 store.execute(setPosts(posts));
 
-const parent = ssrDomDocument.createEmpty();
+const parent = SSRDomDocument.emptyElement();
 render(vdom(App, {state: store.state()}), parent);
-const parsedParent = parse(parent.toString());
+const parsedParent = parse(parent.hydrateToString());
 
 const headEl = clientHtml.querySelector('head');
 headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(store.state())}</script>`);
