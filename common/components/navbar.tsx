@@ -1,9 +1,9 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
-import { Category, CategoryId, setSelectedCategoryId, store } from "../store";
+import { PageState, PageId, setSelectedPageId, store } from "../store";
 
 interface Props
 {
-    readonly categories: Category[];
+    readonly categories: PageState[];
 }
 
 export class Navbar extends ClassComponent<Props>
@@ -23,10 +23,10 @@ export class Navbar extends ClassComponent<Props>
     private onClickCategory = (e: MouseEvent) =>
     {
         const button = e.target as HTMLButtonElement;
-        const categoryId = button.attributes['data-category-id'].value as CategoryId;
+        const categoryId = button.attributes['data-category-id'].value as PageId;
         console.log(categoryId);
 
         window.history.pushState({categoryId}, categoryId, `/${categoryId}`);
-        store.execute(setSelectedCategoryId(categoryId));
+        store.execute(setSelectedPageId(categoryId));
     }
 }

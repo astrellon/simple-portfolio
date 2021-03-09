@@ -15,7 +15,7 @@ export class PostParagraph extends ClassComponent<Props>
 
         return <p>
             { text }
-            { pictures.map(picture => <PostPicture picture={picture} />) }
+            { pictures && pictures.map(picture => <PostPicture picture={picture} />) }
         </p>
     }
 }

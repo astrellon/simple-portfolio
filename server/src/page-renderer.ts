@@ -23,9 +23,9 @@ export class PageRenderer
     {
         this.rawClientHtml = rawClientHtml;
         this.store = new DataStore<State>({
-            categories: [],
+            pages: [],
             posts: {},
-            selectedCategoryId: ''
+            selectedPageId: ''
         });
 
         this.store.subscribeAny(() =>
@@ -36,12 +36,12 @@ export class PageRenderer
 
     public isCategory(category?: string)
     {
-        return category != undefined && this.store.state().categories.findIndex(c => c.id === category) >= 0;
+        return category != undefined && this.store.state().pages.findIndex(c => c.id === category) >= 0;
     }
 
     public defaultCategory()
     {
-        return this.store.state().selectedCategoryId;
+        return this.store.state().selectedPageId;
     }
 
     public render(withPartialStore: Partial<State>)

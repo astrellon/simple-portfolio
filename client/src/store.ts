@@ -2,9 +2,9 @@ import DataStore, { Modifier } from "simple-data-store";
 import { setStore, State } from "../../common/store";
 
 setStore(new DataStore<State>({
-    categories: [],
+    pages: [],
     posts: {},
-    selectedCategoryId: ''
+    selectedPageId: ''
 }));
 
 export function setInitialState(state: State): Modifier<State>

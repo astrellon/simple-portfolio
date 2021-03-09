@@ -1,0 +1,21 @@
+[
+    {
+        "type": "page",
+        "id": "about",
+        "title": "About Me",
+        "singlePage": true,
+        "defaultPage": true
+    },
+    {
+        "type": "page",
+        "id": "work",
+        "title": "Work",
+        "singlePage": false
+    },
+    {
+        "type": "page",
+        "id": "projects",
+        "title": "Personal Projects",
+        "singlePage": false
+    }
+]

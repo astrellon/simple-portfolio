@@ -1,10 +1,10 @@
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
-import { Category, PostState } from "../store";
+import { PageState, PostState } from "../store";
 import { Post } from "./post";
 
 interface Props
 {
-    readonly category?: Category;
+    readonly category?: PageState;
     readonly posts: PostState[];
 }
 

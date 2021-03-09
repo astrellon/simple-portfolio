@@ -1,44 +1,21 @@
 import "array-flat-polyfill";
 import * as fs from "fs";
-import { Category, CategoryId, PostState, setPosts, setCategories, setSelectedCategoryId } from "../../common/store";
+import * as path from "path";
+import { DataStored, addData } from "../../common/store";
 import { Server } from "./server";
 import { PageRenderer } from "./page-renderer";
 
 let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
 const pageRenderer = new PageRenderer(clientFileHtml);
 
-const categories: Category[] = [{
-    id: 'about' as CategoryId,
-    title: 'About Me'
-},
+const files = fs.readdirSync("./data");
+for (const file of files)
 {
-    id: 'work' as CategoryId,
-    title: 'Previous Work'
-},
-{
-    id: 'projects' as CategoryId,
-    title: 'Personal Projects'
-}];
-
-const posts: PostState[] = [{
-    categoryId: 'projects' as CategoryId,
-    title: 'Title 1!',
-    contents: [
-        {
-            pictures: [],
-            text: 'Paragraph 1'
-        },
-        {
-            pictures: [],
-            text: 'Paragraph 2'
-        }
-    ],
-    id: ''
-}];
-
-pageRenderer.store.execute(setCategories(categories));
-pageRenderer.store.execute(setPosts(posts));
-pageRenderer.store.execute(setSelectedCategoryId(categories[0].id));
+    const combinedFilePath = path.join("./data", file);
+    console.log('Reading file:', combinedFilePath);
+    const pageData = JSON.parse(fs.readFileSync(combinedFilePath).toString()) as DataStored[];
+    pageRenderer.store.execute(addData(pageData));
+}
 
 const server = new Server('localhost', 8000);
 server.registerRoute('/src', (req, res) =>
@@ -82,7 +59,7 @@ server.registerRoute('/', (req, res) =>
         res.setHeader("Content-Type", "text/html");
         res.setHeader("Cache-Control", "max-age=10");
         res.writeHead(200);
-        res.end(pageRenderer.render({ selectedCategoryId: category }));
+        res.end(pageRenderer.render({ selectedPageId: category }));
     }
     else
     {

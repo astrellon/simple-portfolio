@@ -2,7 +2,7 @@ import './normalize.css';
 import './styles.scss';
 
 import { vdom, render } from "simple-tsx-vdom";
-import { setSelectedCategoryId, State, store } from "../../common/store";
+import { setSelectedPageId, State, store } from "../../common/store";
 import { App } from "../../common/components/app";
 import { setInitialState } from './store';
 import { hydrate } from 'simple-tsx-vdom-hydration';
@@ -35,6 +35,6 @@ window.addEventListener('popstate', (event) =>
     const stateData = event.state;
     if (stateData.categoryId)
     {
-        store.execute(setSelectedCategoryId(stateData.categoryId));
+        store.execute(setSelectedPageId(stateData.categoryId));
     }
 });
