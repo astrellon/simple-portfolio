@@ -39,6 +39,11 @@ export class PageRenderer
         return category != undefined && this.store.state().categories.findIndex(c => c.id === category) >= 0;
     }
 
+    public defaultCategory()
+    {
+        return this.store.state().selectedCategoryId;
+    }
+
     public render(withPartialStore: Partial<State>)
     {
         const state = Object.assign({}, this.store.state(), withPartialStore);

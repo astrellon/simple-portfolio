@@ -62,6 +62,7 @@ server.registerRoute('/src', (req, res) =>
         {
             res.setHeader('Content-Type', 'application/octet-stream');
         }
+        res.setHeader("Cache-Control", "max-age=3600");
 
         res.writeHead(200);
         res.end(data);
@@ -70,16 +71,16 @@ server.registerRoute('/src', (req, res) =>
 
 server.registerRoute('/', (req, res) =>
 {
-    const category = req.url?.substr(1);
+    let category = req.url?.substr(1);
     if (category === '')
     {
-        res.setHeader("Content-Type", "text/html");
-        res.writeHead(200);
-        res.end(pageRenderer.render({}));
+        category = pageRenderer.defaultCategory();
     }
-    else if (pageRenderer.isCategory(category))
+
+    if (pageRenderer.isCategory(category))
     {
         res.setHeader("Content-Type", "text/html");
+        res.setHeader("Cache-Control", "max-age=10");
         res.writeHead(200);
         res.end(pageRenderer.render({ selectedCategoryId: category }));
     }
