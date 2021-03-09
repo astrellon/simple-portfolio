@@ -1,9 +1,7 @@
 import "array-flat-polyfill";
 import * as fs from "fs";
-import { VDom } from "simple-tsx-vdom";
 import { Category, CategoryId, PostState, setPosts, setCategories, setSelectedCategoryId } from "../../common/store";
 import { Server } from "./server";
-import { SSRDomDocument } from "simple-tsx-vdom-ssr";
 import { PageRenderer } from "./page-renderer";
 
 let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();

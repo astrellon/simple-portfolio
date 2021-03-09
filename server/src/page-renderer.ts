@@ -4,11 +4,20 @@ import { render, vdom, VDom } from "simple-tsx-vdom";
 import { SSRDomDocument } from "simple-tsx-vdom-ssr";
 import { App } from "../../common/components/app";
 import { State } from "../../common/store";
+import equal from 'fast-deep-equal';
+
+interface PreviousRender
+{
+    readonly state: Partial<State>;
+    readonly htmlText: string;
+}
 
 export class PageRenderer
 {
     public readonly rawClientHtml: string;
     public readonly store: DataStore<State>;
+
+    private previousRenders: PreviousRender[] = [];
 
     constructor (rawClientHtml: string)
     {
@@ -17,6 +26,11 @@ export class PageRenderer
             categories: [],
             posts: {},
             selectedCategoryId: ''
+        });
+
+        this.store.subscribeAny(() =>
+        {
+            this.previousRenders = [];
         });
     }
 
@@ -27,25 +41,50 @@ export class PageRenderer
 
     public render(withPartialStore: Partial<State>)
     {
-        const ssrDomDocument = new SSRDomDocument();
-        const ssrVDom = new VDom(ssrDomDocument);
-        VDom.current = ssrVDom;
-
         const state = Object.assign({}, this.store.state(), withPartialStore);
-        // Check if there's any change.
+        const previousRender = this.findPreviousState(state);
 
-        const clientDoc = parse(this.rawClientHtml);
-        const rootEl = clientDoc.querySelector('body');
+        if (!previousRender)
+        {
+            const ssrDomDocument = new SSRDomDocument();
+            const ssrVDom = new VDom(ssrDomDocument);
+            VDom.current = ssrVDom;
 
-        const parent = SSRDomDocument.emptyElement();
+            const clientDoc = parse(this.rawClientHtml);
+            const rootEl = clientDoc.querySelector('body');
 
-        render(vdom(App, { state }), parent);
-        const parsedParent = parse(parent.hydrateToString());
+            const parent = SSRDomDocument.emptyElement();
 
-        const headEl = clientDoc.querySelector('head');
-        headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(state)}</script>`);
+            render(vdom(App, { state }), parent);
+            const parsedParent = parse(parent.hydrateToString());
 
-        rootEl.childNodes.splice(0, 0, parsedParent);
-        return clientDoc.toString();
+            const headEl = clientDoc.querySelector('head');
+            headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(state)}</script>`);
+
+            rootEl.childNodes.splice(0, 0, parsedParent);
+            const htmlText = clientDoc.toString();
+            this.previousRenders.push({ htmlText, state });
+
+            console.log('New render response for: ', withPartialStore);
+
+            return htmlText;
+        }
+
+        console.log('Cached previous render response for: ', withPartialStore);
+        return previousRender.htmlText;
+    }
+
+    private findPreviousState(withPartialState: Partial<State>)
+    {
+        for (let i = 0; i < this.previousRenders.length; i++)
+        {
+            const previousRender = this.previousRenders[i];
+            if (equal(previousRender.state, withPartialState))
+            {
+                return previousRender;
+            }
+        }
+
+        return undefined;
     }
 }
