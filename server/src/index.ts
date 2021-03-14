@@ -48,7 +48,7 @@ server.registerRoute('/src', (req, res) =>
 
 server.registerRoute('/', (req, res) =>
 {
-    let category = req.url?.substr(1);
+    let category = req.url?.substr(1) || '';
     if (category === '')
     {
         category = pageRenderer.defaultCategory();

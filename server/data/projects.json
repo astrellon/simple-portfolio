@@ -1,0 +1,28 @@
+[
+    {
+        "type": "post",
+        "pageId": "projects",
+        "title": "Simple Virtual DOM",
+        "contents": [
+            {
+                "text": "I made my own version of React"
+            },
+            {
+                "text": "Mostly for learning but it's also what this website is powered by."
+            }
+        ]
+    },
+    {
+        "type": "post",
+        "pageId": "projects",
+        "title": "Simple Data Store",
+        "contents": [
+            {
+                "text": "I made my own version of Redux"
+            },
+            {
+                "text": "Because I found Redux required too much boilerplate and needed more structure."
+            }
+        ]
+    }
+]

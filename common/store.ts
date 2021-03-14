@@ -100,9 +100,9 @@ export function addData(newData: DataStored[]): Modifier<State>
             if (data.type === 'page')
             {
                 pages.push(data);
-                if (typeof(data.defaultPage) === 'string')
+                if (data.defaultPage === true)
                 {
-                    selectedPageId = data.defaultPage;
+                    selectedPageId = data.id;
                 }
             }
             else if (data.type === 'post')

@@ -1,0 +1,31 @@
+[
+    {
+        "type": "post",
+        "pageId": "work",
+        "title": "Rome2rio",
+        "contents": [
+            {
+                "text": "Rome2rio is a travel searching website for showing you how to get from anyway to anyway in the world."
+            },
+            {
+                "text": "I focused on adding timetables, buying tickets and working on internal tools for updating and creating routes live."
+            }
+        ]
+    },
+    {
+        "type": "post",
+        "pageId": "work",
+        "title": "miGenius",
+        "contents": [
+            {
+                "text": "miGenius specialised in creating photo-real raytraced computer generated graphics."
+            },
+            {
+                "text": "I work on the backend server, frontend Flash and JavaScript clients."
+            },
+            {
+                "text": "We also created a Trimble SketchUp plugin for syncing the 3d scene with a server for showing a photoreal visualisation of what you are currently working on."
+            }
+        ]
+    }
+]
