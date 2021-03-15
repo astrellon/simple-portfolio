@@ -1,3 +1,5 @@
+require.extensions['.scss'] = () => undefined;
+
 import "array-flat-polyfill";
 import * as fs from "fs";
 import * as path from "path";

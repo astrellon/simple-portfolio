@@ -61,6 +61,11 @@ export interface State
 
 export type DataStored = PageStored | PostStored;
 
+export interface WindowHistory
+{
+    readonly pageId: PageId;
+}
+
 ///////
 
 export function setPosts(newPosts: PostState[]): Modifier<State>

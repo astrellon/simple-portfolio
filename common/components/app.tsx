@@ -1,5 +1,5 @@
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
-import { State } from "../store";
+import { PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 import { Posts } from "./posts";
@@ -11,11 +11,21 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages: categories, posts, selectedPageId: selectedCategoryId } = props.state;
+    const { pages, posts, selectedPageId } = props.state;
 
     return <main>
-        <Navbar categories={categories} />
-        <Posts category={categories.find(c => c.id === selectedCategoryId)} posts={posts[selectedCategoryId]} />
+        <Navbar pages={pages} onPageChange={onPageChange} />
+        <Posts category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
         <Footer />
     </main>
+}
+
+function onPageChange(page: PageState)
+{
+    const pushedState: WindowHistory = {
+        pageId: page.id
+    }
+
+    window.history.pushState(pushedState, page.title, `/${page.id}`);
+    store.execute(setSelectedPageId(page.id));
 }

@@ -1,32 +1,30 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
-import { PageState, PageId, setSelectedPageId, store } from "../store";
+import { PageState } from "../store";
+import NavbarPageButton from "./navbar-page-button";
+import './navbar.scss';
 
 interface Props
 {
-    readonly categories: PageState[];
+    readonly pages: PageState[];
+    readonly onPageChange: (page: PageState) => void;
 }
 
 export class Navbar extends ClassComponent<Props>
 {
     public render()
     {
-        const { categories } = this.props;
+        const { pages } = this.props;
 
-        return <nav>
-            <h1>Simple CMS</h1>
-            <div>
-                { categories.map(category => <button data-category-id={category.id} onclick={this.onClickCategory}>{category.title}</button>)}
+        return <nav class='navbar'>
+            <h1>Alan Lawrey</h1>
+            <div class='navbar__page-buttons'>
+                { pages.map(page => <NavbarPageButton page={page} onClick={this.onClickPage} />) }
             </div>
         </nav>
     }
 
-    private onClickCategory = (e: MouseEvent) =>
+    private onClickPage = (page: PageState) =>
     {
-        const button = e.target as HTMLButtonElement;
-        const categoryId = button.attributes['data-category-id'].value as PageId;
-        console.log(categoryId);
-
-        window.history.pushState({categoryId}, categoryId, `/${categoryId}`);
-        store.execute(setSelectedPageId(categoryId));
+        this.props.onPageChange(page);
     }
 }

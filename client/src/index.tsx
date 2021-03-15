@@ -2,8 +2,8 @@ import './normalize.css';
 import './styles.scss';
 
 import { vdom, render } from "simple-tsx-vdom";
-import { setSelectedPageId, State, store } from "../../common/store";
-import { App } from "../../common/components/app";
+import { setSelectedPageId, WindowHistory, State, store } from "./common/store";
+import { App } from "./common/components/app";
 import { setInitialState } from './store';
 import { hydrate } from 'simple-tsx-vdom-hydration';
 
@@ -32,9 +32,9 @@ store.subscribeAny((state) =>
 window.addEventListener('popstate', (event) =>
 {
     console.log(event);
-    const stateData = event.state;
-    if (stateData.categoryId)
+    const stateData: WindowHistory = event.state;
+    if (stateData.pageId)
     {
-        store.execute(setSelectedPageId(stateData.categoryId));
+        store.execute(setSelectedPageId(stateData.pageId));
     }
 });

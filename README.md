@@ -1,6 +1,6 @@
-# Simple CMS
+# Simple Portfolio
 
-A simple content management system built using simple-tsx-vdom and simple-data-store.
+A simple portfolio system built using [simple-tsx-vdom](https://www.npmjs.com/package/simple-tsx-vdom) and simple-data-store.
 
 Aiming to use server side rendering.
 
