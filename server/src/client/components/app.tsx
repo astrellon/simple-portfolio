@@ -18,7 +18,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
     const { pages, posts, selectedPageId } = props.state;
 
     return <main class='container'>
-        <Navbar pages={pages} onPageChange={onPageChange} />
+        <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} />
         <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
         <Footer />
     </main>
