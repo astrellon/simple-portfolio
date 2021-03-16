@@ -1,3 +1,5 @@
-.navbar-button {
+@import '../styles.scss';
 
+.navbar-page-button {
+    @extend .button;
 }

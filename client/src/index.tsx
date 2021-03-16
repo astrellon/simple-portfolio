@@ -1,6 +1,3 @@
-import './normalize.css';
-import './styles.scss';
-
 import { vdom, render } from "simple-tsx-vdom";
 import { setSelectedPageId, WindowHistory, State, store } from "./common/store";
 import { App } from "./common/components/app";

@@ -1,3 +1,7 @@
+import '../normalize.css';
+import '../styles.scss';
+import '../grid.scss';
+
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
 import { PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
 import { Footer } from "./footer";
@@ -13,7 +17,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
 {
     const { pages, posts, selectedPageId } = props.state;
 
-    return <main>
+    return <main class='container'>
         <Navbar pages={pages} onPageChange={onPageChange} />
         <Posts category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
         <Footer />

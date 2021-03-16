@@ -12,7 +12,7 @@ export const Posts: FunctionalComponent<Props> = (props: Props) =>
 {
     const { posts, category } = props;
 
-    return <div>
+    return <div class='posts'>
         { category && !category.singlePage &&
         <h2>{category.title}</h2> }
         {posts && posts.map(post => <Post key={post.id} post={post} />)}

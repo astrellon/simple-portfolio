@@ -1,9 +1,10 @@
+require.extensions['.css'] = () => undefined;
 require.extensions['.scss'] = () => undefined;
 
 import "array-flat-polyfill";
 import * as fs from "fs";
 import * as path from "path";
-import { DataStored, addData } from "../../common/store";
+import { DataStored, addData } from "./common/store";
 import { Server } from "./server";
 import { PageRenderer } from "./page-renderer";
 

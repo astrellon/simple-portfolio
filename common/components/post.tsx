@@ -1,4 +1,4 @@
-import { ClassComponent, vdom } from "simple-tsx-vdom";
+import { FinishUnmountHandler, ClassComponent, vdom } from "simple-tsx-vdom";
 import { PostState } from "../store";
 import { PostParagraph } from "./post-paragraph";
 
@@ -9,6 +9,16 @@ interface Props
 
 export class Post extends ClassComponent<Props>
 {
+    public onMount()
+    {
+
+    }
+
+    public onUnmount(finishedHandler: FinishUnmountHandler)
+    {
+        finishedHandler();
+    }
+
     public render()
     {
         const { title, contents } = this.props.post;

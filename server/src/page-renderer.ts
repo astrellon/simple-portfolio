@@ -2,8 +2,8 @@ import parse from "node-html-parser";
 import DataStore from "simple-data-store";
 import { render, vdom, VDom } from "simple-tsx-vdom";
 import { SSRDomDocument } from "simple-tsx-vdom-ssr";
-import { App } from "../../common/components/app";
-import { State } from "../../common/store";
+import { App } from "./common/components/app";
+import { State } from "./common/store";
 import equal from 'fast-deep-equal';
 
 interface PreviousRender
