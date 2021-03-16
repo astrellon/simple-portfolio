@@ -1,6 +1,5 @@
 import DataStore, { Modifier } from "simple-data-store";
-import { setStore, State } from "../../common/store";
-import { PageId } from "./common/store";
+import { setStore, State } from "./store";
 
 setStore(new DataStore<State>({
     pages: [],

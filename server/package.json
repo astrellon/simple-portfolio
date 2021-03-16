@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run buildClient && npm run startServer",
     "startServer": "ts-node src/index.ts --jsx",
-    "buildClient": "rm -rf ./clientDeploy/ && cd ../client && npm run build && cp -r ./deploy ../server/clientDeploy",
+    "buildClient": "rm -rf ./clientDeploy/ && parcel build -d ./clientDeploy ./src/client/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alan Lawrey",
@@ -15,6 +15,8 @@
     "@types/node": "^14.14.31",
     "array-flat-polyfill": "^1.0.1",
     "node-html-parser": "^3.0.3",
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.32.8",
     "simple-data-store": "^3.3.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
@@ -22,6 +24,7 @@
   "dependencies": {
     "fast-deep-equal": "^3.1.3",
     "simple-tsx-vdom": "^0.6.0",
+    "simple-tsx-vdom-hydration": "^0.1.3",
     "simple-tsx-vdom-ssr": "^0.1.1"
   }
 }

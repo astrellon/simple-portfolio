@@ -4,7 +4,7 @@ require.extensions['.scss'] = () => undefined;
 import "array-flat-polyfill";
 import * as fs from "fs";
 import * as path from "path";
-import { DataStored, addData } from "./common/store";
+import { DataStored, addData } from "./client/store";
 import { Server } from "./server";
 import { PageRenderer } from "./page-renderer";
 
@@ -21,7 +21,7 @@ for (const file of files)
 }
 
 const server = new Server('localhost', 8000);
-server.registerRoute('/src', (req, res) =>
+server.registerRoute('/client', (req, res) =>
 {
     fs.readFile(`./clientDeploy${req.url}`, (err, data) =>
     {

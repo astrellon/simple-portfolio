@@ -1,7 +1,7 @@
 import { vdom, render } from "simple-tsx-vdom";
-import { setSelectedPageId, WindowHistory, State, store } from "./common/store";
-import { App } from "./common/components/app";
-import { setInitialState } from './store';
+import { setSelectedPageId, WindowHistory, State, store } from "./store";
+import { App } from "./components/app";
+import { setInitialState } from './clientStore';
 import { hydrate } from 'simple-tsx-vdom-hydration';
 
 (globalThis as any).__store = store;
