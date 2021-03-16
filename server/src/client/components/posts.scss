@@ -1,3 +1,20 @@
+@import '../mixins';
+
 .posts {
-    translate: transform 0.3s ease-in-out;
+    position: absolute;
+    transition-property: transform, opacity;
+    @include cubic-transition();
+
+    transform: translateX(-3rem);
+    opacity: 0;
+    max-width: 96rem;
+
+    &.mounted {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    &.unmounted {
+        transform: translateX(3rem);
+        opacity: 0;
+    }
 }

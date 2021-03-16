@@ -8,24 +8,3 @@
 @mixin default-text-shadow {
     text-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
 }
-
-@mixin pill-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    padding: 0.5rem 1rem;
-
-    background: rgba(0, 0, 0, 0.15);
-
-    transition-property: background;
-    @include cubic-transition();
-
-    border-radius: 0.5rem;
-    cursor: pointer;
-
-    &:hover {
-        background: rgba(0, 0, 0, 0.3);
-    }
-}
