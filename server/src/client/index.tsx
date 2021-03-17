@@ -15,6 +15,7 @@ if (initialState != undefined)
 
 function renderApp(state: State)
 {
+    document.body.classList.toggle('dark-theme', state.darkTheme);
     render(<App state={state} />, document.body);
 }
 // Render the app on start
@@ -24,6 +25,11 @@ renderApp(store.state());
 store.subscribeAny((state) =>
 {
     renderApp(state);
+});
+
+store.subscribe(state => state.darkTheme, (state, darkTheme) =>
+{
+    document.cookie = `darkTheme=${darkTheme}`;
 });
 
 window.addEventListener('popstate', (event) =>

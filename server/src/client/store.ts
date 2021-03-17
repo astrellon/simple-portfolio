@@ -57,6 +57,7 @@ export interface State
     readonly pages: PageState[];
     readonly posts: PostStateMap;
     readonly selectedPageId: string;
+    readonly darkTheme: boolean;
 }
 
 export type DataStored = PageStored | PostStored;
@@ -119,6 +120,11 @@ export function addData(newData: DataStored[]): Modifier<State>
 
         return { pages, posts, selectedPageId }
     }
+}
+
+export function setDarkTheme(darkTheme: boolean): Modifier<State>
+{
+    return () => { return { darkTheme } }
 }
 
 ///////

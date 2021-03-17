@@ -1,9 +1,0 @@
-@import '../styles.scss';
-
-.navbar-page-button {
-    @extend .button;
-
-    &.is--active {
-        background-color: darken($color-lightGrey, 10%);
-    }
-}

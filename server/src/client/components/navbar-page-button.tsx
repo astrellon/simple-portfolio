@@ -1,6 +1,6 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PageState } from "../store";
-import "./navbar-page-button.scss";
+import Button from "./button";
 
 interface Props
 {
@@ -15,7 +15,7 @@ export default class NavbarPageButton extends ClassComponent<Props>
     {
         const { page, active } = this.props;
 
-        return <button class={`navbar-page-button ${active ? 'is--active' : ''}`} onclick={this.onClick}>{page.title}</button>
+        return <Button active={active} onClick={this.onClick}>{page.title}</Button>
     }
 
     private onClick = () =>

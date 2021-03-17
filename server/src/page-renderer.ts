@@ -25,7 +25,8 @@ export class PageRenderer
         this.store = new DataStore<State>({
             pages: [],
             posts: {},
-            selectedPageId: ''
+            selectedPageId: '',
+            darkTheme: false
         });
 
         this.store.subscribeAny(() =>
@@ -34,12 +35,12 @@ export class PageRenderer
         });
     }
 
-    public isCategory(category?: string)
+    public isPage(pageId?: string)
     {
-        return category != undefined && this.store.state().pages.findIndex(c => c.id === category) >= 0;
+        return pageId != undefined && this.store.state().pages.findIndex(c => c.id === pageId) >= 0;
     }
 
-    public defaultCategory()
+    public defaultPage()
     {
         return this.store.state().selectedPageId;
     }
@@ -56,17 +57,21 @@ export class PageRenderer
             VDom.current = ssrVDom;
 
             const clientDoc = parse(this.rawClientHtml);
-            const rootEl = clientDoc.querySelector('body');
+            const bodyEl = clientDoc.querySelector('body');
+
+            if (state.darkTheme)
+            {
+                bodyEl.setAttribute('class', 'dark-theme');
+            }
 
             const parent = SSRDomDocument.emptyElement();
 
             render(vdom(App, { state }), parent);
             const parsedParent = parse(parent.hydrateToString());
 
-            const headEl = clientDoc.querySelector('head');
-            headEl.insertAdjacentHTML('beforeend', `<script>window.__state=${JSON.stringify(state)}</script>`);
+            bodyEl.insertAdjacentHTML('afterbegin', `<script>window.__state=${JSON.stringify(state)}</script>`);
 
-            rootEl.childNodes.splice(0, 0, parsedParent);
+            bodyEl.childNodes.splice(0, 0, parsedParent);
             const htmlText = clientDoc.toString();
             this.previousRenders.push({ htmlText, state });
 

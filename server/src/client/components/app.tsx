@@ -15,10 +15,10 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId } = props.state;
+    const { pages, posts, selectedPageId, darkTheme } = props.state;
 
     return <main class='container'>
-        <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} />
+        <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
         <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
         <Footer />
     </main>

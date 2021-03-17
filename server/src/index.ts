@@ -4,9 +4,10 @@ require.extensions['.scss'] = () => undefined;
 import "array-flat-polyfill";
 import * as fs from "fs";
 import * as path from "path";
-import { DataStored, addData } from "./client/store";
+import { DataStored, addData, State } from "./client/store";
 import { Server } from "./server";
 import { PageRenderer } from "./page-renderer";
+import * as cookie from "cookie";
 
 let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
 const pageRenderer = new PageRenderer(clientFileHtml);
@@ -51,18 +52,25 @@ server.registerRoute('/client', (req, res) =>
 
 server.registerRoute('/', (req, res) =>
 {
-    let category = req.url?.substr(1) || '';
-    if (category === '')
+    let pageId = req.url?.substr(1) || '';
+    if (pageId === '')
     {
-        category = pageRenderer.defaultCategory();
+        pageId = pageRenderer.defaultPage();
     }
 
-    if (pageRenderer.isCategory(category))
+    const cookies = cookie.parse(req.headers.cookie || '');
+
+    if (pageRenderer.isPage(pageId))
     {
         res.setHeader("Content-Type", "text/html");
         res.setHeader("Cache-Control", "max-age=10");
         res.writeHead(200);
-        res.end(pageRenderer.render({ selectedPageId: category }));
+
+        let renderState: Partial<State> = {
+            selectedPageId: pageId,
+            darkTheme: cookies.darkTheme === 'true'
+        };
+        res.end(pageRenderer.render(renderState));
     }
     else
     {

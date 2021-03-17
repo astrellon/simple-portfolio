@@ -4,7 +4,8 @@ import { setStore, State } from "./store";
 setStore(new DataStore<State>({
     pages: [],
     posts: {},
-    selectedPageId: ''
+    selectedPageId: '',
+    darkTheme: false
 }));
 
 export function setInitialState(state: State): Modifier<State>

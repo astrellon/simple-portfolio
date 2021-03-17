@@ -1,0 +1,104 @@
+@import '../variables';
+@import '../mixins';
+
+/* BUTTONS */
+.button {
+    padding: 1rem 2.5rem;
+    color: $color-darkGrey;
+    background: $color-lightGrey;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-size: $font-size;
+    line-height: 1;
+    text-align: center;
+
+    @include cubic-transition();
+    transition-property: opacity, background;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+
+    // &+& {
+    //     margin-left: 1rem;
+    // }
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &.is--active {
+        background-color: darken($color-lightGrey, 10%);
+    }
+
+    &.primary,
+    &.secondary,
+    &.dark,
+    &.error,
+    &.success {
+        color: #fff;
+        z-index: 1;
+        /* hightlight from other button's border when grouped */
+        background-color: #000;
+        background-color: $color-primary;
+    }
+
+    &.secondary {
+        background-color: $color-grey;
+    }
+
+    &.dark {
+        background-color: $color-darkGrey;
+    }
+
+    &.error {
+        background-color: $color-error;
+    }
+
+    &.success {
+        background-color: $color-success;
+    }
+
+    &.outline {
+        background-color: transparent;
+        border-color: $color-lightGrey;
+    }
+
+    &.outline.primary {
+        border-color: $color-primary;
+        color: $color-primary;
+    }
+
+    &.outline.secondary {
+        border-color: $color-grey;
+        color: $color-grey;
+    }
+
+    &.outline.dark {
+        border-color: $color-darkGrey;
+        color: $color-darkGrey;
+    }
+
+    &.clear {
+        background-color: transparent;
+        border-color: transparent;
+        color: $color-primary;
+    }
+
+    &.icon {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &.icon>img {
+        margin-left: 2px;
+    }
+
+    &.icon-only {
+        padding: 1rem;
+    }
+
+}
