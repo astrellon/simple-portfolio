@@ -6,7 +6,7 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "module": "commonjs",
-        "target": "ES2019",
+        "target": "ESNext",
         "noEmitOnError": true,
         "declaration": true,
         "esModuleInterop": true,
