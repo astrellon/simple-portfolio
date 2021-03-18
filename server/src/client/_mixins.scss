@@ -6,5 +6,9 @@
 }
 
 @mixin default-text-shadow {
-    text-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
+}
+
+@mixin default-box-shadow {
+    box-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
 }

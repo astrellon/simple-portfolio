@@ -25,7 +25,7 @@ export class Navbar extends ClassComponent<Props>
                 { pages.map(page => <NavbarPageButton active={page.id === selectedPageId} page={page} onClick={this.onClickPage} />) }
             </ButtonGroup>
 
-            <Button active={darkTheme} onClick={this.toggleDarkTheme}>{darkTheme ? 'Dark' : 'Light'}</Button>
+            <Button class='navbar__theme-button' active={darkTheme} onClick={this.toggleDarkTheme}>{darkTheme ? 'Dark' : 'Light'}</Button>
         </nav>
     }
 

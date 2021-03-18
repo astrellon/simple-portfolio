@@ -25,7 +25,7 @@ export class Posts extends ClassComponent<Props>
         }
         else
         {
-            setTimeout(() => domElement.classList.add('mounted'), 0);
+            setTimeout(() => domElement.classList.add('mounted'), 100);
         }
     }
 
