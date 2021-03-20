@@ -30,6 +30,7 @@ server.registerRoute('/client', (req, res) =>
         {
             res.writeHead(404);
             res.end();
+            return;
         }
         if (req.url?.endsWith('.css'))
         {
@@ -38,6 +39,45 @@ server.registerRoute('/client', (req, res) =>
         else if (req.url?.endsWith('.js'))
         {
             res.setHeader('Content-Type', 'text/javascript');
+        }
+        else
+        {
+            res.setHeader('Content-Type', 'application/octet-stream');
+        }
+        res.setHeader("Cache-Control", "max-age=3600");
+
+        res.writeHead(200);
+        res.end(data);
+    });
+});
+
+server.registerRoute('/assets', (req, res) =>
+{
+    if (!req.url)
+    {
+        res.writeHead(404);
+        res.end();
+        return;
+    }
+
+    const url = req.url;
+
+    fs.readFile('.' + url, (err, data) =>
+    {
+        if (err != null)
+        {
+            res.writeHead(404);
+            res.end();
+            return;
+        }
+
+        if (url.endsWith('.jpeg') || url.endsWith('.jpg'))
+        {
+            res.setHeader('Content-Type', 'image/jpeg');
+        }
+        else if (url.endsWith('.png'))
+        {
+            res.setHeader('Content-Type', 'image/png');
         }
         else
         {

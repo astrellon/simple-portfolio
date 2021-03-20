@@ -3,6 +3,7 @@ import { Editable, Opaque } from './common-types';
 
 export type PostAssetType = 'text' | 'intrinsic' | 'component';
 export type PageId = Opaque<string, 'PageId'>;
+export type Url = Opaque<string, 'Url'>;
 
 export interface PostAssetAttributes
 {
@@ -24,8 +25,10 @@ export interface PageStored extends PageState
 
 export interface PostPictureState
 {
-    readonly url: string;
+    readonly url: Url;
     readonly position: 'left' | 'right' | 'center';
+    readonly fullSizeUrl: Url;
+    readonly caption: string;
 }
 
 export interface PostParagraphState

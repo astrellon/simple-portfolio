@@ -5,7 +5,13 @@
         "title": "Rome2rio",
         "contents": [
             {
-                "text": "Rome2rio is a travel searching website for showing you how to get from anyway to anyway in the world."
+                "text": "Rome2rio is a travel searching website for showing you how to get from anyway to anyway in the world.",
+                "pictures": [{
+                    "url": "/assets/rome2rioTickets_small.png",
+                    "caption": "Caption text",
+                    "position": "right",
+                    "fullSizeUrl": "/assets/rome2rioTickets.png"
+                }]
             },
             {
                 "text": "I focused on adding timetables, buying tickets and working on internal tools for updating and creating routes live."

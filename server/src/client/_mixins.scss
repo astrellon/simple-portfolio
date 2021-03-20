@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @import './variables';
 
 @mixin cubic-transition {
@@ -7,8 +9,30 @@
 
 @mixin default-text-shadow {
     text-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
+
+    .dark-theme & {
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 1);
+    }
 }
 
 @mixin default-box-shadow {
     box-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
+
+    .dark-theme & {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 1);
+    }
+}
+
+@mixin card {
+    padding: 1rem;
+    border-radius: 4px;
+    background: $bg-light-card-colour;
+    box-shadow: 0 1px 3px rgba($colour-darkGrey, 0.5);
+
+    transition-property: background;
+    @include cubic-transition();
+
+    .dark-theme & {
+        background: $bg-dark-card-colour;
+    }
 }

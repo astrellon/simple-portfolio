@@ -1,0 +1,23 @@
+@import '../mixins';
+
+.post-picture {
+    @include card();
+
+    width: 360px;
+
+    &>img {
+        width: 100%;
+        max-height: 420px;
+    }
+
+
+    &.is--left {
+        float: left;
+        margin-right: 2rem;
+    }
+
+    &.is--right {
+        float: right;
+        margin-left: 2rem;
+    }
+}

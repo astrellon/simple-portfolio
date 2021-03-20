@@ -27,8 +27,8 @@
     "cookie": "^0.4.1",
     "fast-deep-equal": "^3.1.3",
     "simple-tsx-vdom": "^0.6.2",
-    "simple-tsx-vdom-hydration": "^0.1.3",
-    "simple-tsx-vdom-ssr": "^0.2.0"
+    "simple-tsx-vdom-hydration": "^0.1.5",
+    "simple-tsx-vdom-ssr": "^0.2.1"
   },
   "browserslist": [
     "defaults",

@@ -13,9 +13,9 @@ export class PostParagraph extends ClassComponent<Props>
     {
         const { text, pictures } = this.props.content;
 
-        return <p>
-            { text }
+        return <div>
             { pictures && pictures.map(picture => <PostPicture picture={picture} />) }
-        </p>
+            { text }
+        </div>
     }
 }

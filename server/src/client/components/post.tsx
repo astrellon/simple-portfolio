@@ -1,6 +1,7 @@
-import { FinishUnmountHandler, ClassComponent, vdom } from "simple-tsx-vdom";
+import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PostState } from "../store";
 import { PostParagraph } from "./post-paragraph";
+import './post.scss';
 
 interface Props
 {
@@ -9,28 +10,13 @@ interface Props
 
 export class Post extends ClassComponent<Props>
 {
-    public onMount()
-    {
-
-    }
-
-    public onUnmount(finishedHandler: FinishUnmountHandler)
-    {
-        finishedHandler();
-    }
-
     public render()
     {
         const { title, contents } = this.props.post;
 
-        return <div onclick={this.onClick}>
+        return <div class='post'>
             <h2>{title}</h2>
             <div>{contents.map(content => <PostParagraph content={content} />)}</div>
         </div>
-    }
-
-    private onClick = () =>
-    {
-        alert('Clicked!');
     }
 }
