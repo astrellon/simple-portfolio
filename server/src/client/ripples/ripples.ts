@@ -190,7 +190,8 @@ export default class Ripples
     private readonly textures: WebGLTexture[] = [];
     private readonly framebuffers: WebGLFramebuffer[] = [];
 
-    private dropProgram: BaseWebGlProgram | null = null;
+    private dropCircleProgram: BaseWebGlProgram | null = null;
+    private dropBoxProgram: BaseWebGlProgram | null = null;
     private updateProgram: BaseWebGlProgram | null = null;
     private renderProgram: RenderWebGlProgram | null = null;
     private backgroundTexture: WebGLTexture | null = null;
@@ -358,31 +359,17 @@ export default class Ripples
         parent.addEventListener('mousemove', this.dropAtPointer);
         parent.addEventListener('touchstart', this.dropAtTouch);
         parent.addEventListener('touchmove', this.dropAtTouch);
-
-            // .on('touchmove.ripples touchstart.ripples', function (e)
-            // {
-            //     var touches = e.originalEvent.changedTouches;
-            //     for (var i = 0; i < touches.length; i++)
-            //     {
-            //         dropAtPointer(touches[i]);
-            //     }
-            // })
-
-            // // ...and only a big ripple on mouse down events.
-            // .on('mousedown.ripples', function (e)
-            // {
-            //     dropAtPointer(e, true);
-            // });
     }
 
     public dropAtPointer = (e: MouseEvent) =>
     {
-        this.drop(
-            e.pageX,
-            e.pageY,
-            this.dropRadius,
-            0.01,
-        );
+        // this.drop(
+        //     e.pageX,
+        //     e.pageY,
+        //     this.dropRadius,
+        //     0.01,
+        // );
+        this.dropQuad(e.pageX - 10, e.pageY - 10, 20, 20, 0.01);
     }
 
     public dropAtTouch = (e: TouchEvent) =>
@@ -390,26 +377,64 @@ export default class Ripples
         const touches = e.changedTouches;
         for (const touch of touches)
         {
-            this.drop(touch.pageX, touch.pageY, this.dropRadius, 0.01);
+            this.drop(touch.pageX, touch.pageY, this.dropRadius, 1);
         }
     }
 
-    private drop(x: number, y: number, radius: number, strength: number)
+    public dropQuad = (top: number, left: number, width: number, height: number, strength: number) =>
     {
-        if (!this.dropProgram)
+        if (!this.dropBoxProgram)
         {
             return;
         }
 
         const gl = this.gl;
 
-        var elWidth = this.canvas.width;
-        var elHeight = this.canvas.height;
-        var longestSide = Math.max(elWidth, elHeight);
+        const elWidth = this.canvas.width;
+        const elHeight = this.canvas.height;
+        const longestSide = Math.max(elWidth, elHeight);
+
+        const topLeft = new Float32Array([
+            (2 * left - elWidth) / longestSide,
+            (elHeight - 2 * top) / longestSide
+        ]);
+
+        const bottomRight = new Float32Array([
+            (2 * (left + width) - elWidth) / longestSide,
+            (elHeight - 2 * (top + height)) / longestSide
+        ]);
+
+        gl.viewport(0, 0, this.resolution, this.resolution);
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffers[this.bufferWriteIndex]);
+        this.bindTexture(this.textures[this.bufferReadIndex]);
+
+        gl.useProgram(this.dropBoxProgram.id);
+        gl.uniform2fv(this.dropBoxProgram.locations.topLeft, topLeft);
+        gl.uniform2fv(this.dropBoxProgram.locations.bottomRight, bottomRight);
+        gl.uniform1f(this.dropBoxProgram.locations.strength, strength);
+
+        this.drawQuad();
+
+        this.swapBufferIndices();
+    }
+
+    private drop(x: number, y: number, radius: number, strength: number)
+    {
+        if (!this.dropCircleProgram)
+        {
+            return;
+        }
+
+        const gl = this.gl;
+
+        const elWidth = this.canvas.width;
+        const elHeight = this.canvas.height;
+        const longestSide = Math.max(elWidth, elHeight);
 
         radius = radius / longestSide;
 
-        var dropPosition = new Float32Array([
+        const dropPosition = new Float32Array([
             (2 * x - elWidth) / longestSide,
             (elHeight - 2 * y) / longestSide
         ]);
@@ -419,10 +444,10 @@ export default class Ripples
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffers[this.bufferWriteIndex]);
         this.bindTexture(this.textures[this.bufferReadIndex]);
 
-        gl.useProgram(this.dropProgram.id);
-        gl.uniform2fv(this.dropProgram.locations.center, dropPosition);
-        gl.uniform1f(this.dropProgram.locations.radius, radius);
-        gl.uniform1f(this.dropProgram.locations.strength, strength);
+        gl.useProgram(this.dropCircleProgram.id);
+        gl.uniform2fv(this.dropCircleProgram.locations.center, dropPosition);
+        gl.uniform1f(this.dropCircleProgram.locations.radius, radius);
+        gl.uniform1f(this.dropCircleProgram.locations.strength, strength);
 
         this.drawQuad();
 
@@ -431,104 +456,125 @@ export default class Ripples
 
     private initShaders()
     {
-        var vertexShader = [
-            'attribute vec2 vertex;',
-            'varying vec2 coord;',
-            'void main() {',
-            'coord = vertex * 0.5 + 0.5;',
-            'gl_Position = vec4(vertex, 0.0, 1.0);',
-            '}'
-        ].join('\n');
+        const vertexShader =
+`attribute vec2 vertex;
+varying vec2 coord;
+void main() {
+    coord = vertex * 0.5 + 0.5;
+    gl_Position = vec4(vertex, 0.0, 1.0);
+}`;
 
-        this.dropProgram = createProgram(BaseWebGlProgram, this.gl, vertexShader,
-            `precision highp float;
+        this.dropCircleProgram = createProgram(BaseWebGlProgram, this.gl, vertexShader,
+`precision highp float;
 
-            const float PI = 3.141592653589793;
-            uniform sampler2D texture;
-            uniform vec2 center;
-            uniform float radius;
-            uniform float strength;
+const float PI = 3.141592653589793;
+uniform sampler2D texture;
+uniform vec2 center;
+uniform float radius;
+uniform float strength;
 
-            varying vec2 coord;
+varying vec2 coord;
 
-            void main() {
-            vec4 info = texture2D(texture, coord);
+void main() {
+    vec4 info = texture2D(texture, coord);
 
-            float drop = max(0.0, 1.0 - length(center * 0.5 + 0.5 - coord) / radius);
-            drop = 0.5 - cos(drop * PI) * 0.5;
+    float drop = max(0.0, 1.0 - length(center * 0.5 + 0.5 - coord) / radius);
+    drop = 0.5 - cos(drop * PI) * 0.5;
 
-            info.r += drop * strength;
+    info.r += drop * strength;
 
-            gl_FragColor = info;
-            }`);
+    gl_FragColor = info;
+}`);
+
+        this.dropBoxProgram = createProgram(BaseWebGlProgram, this.gl, vertexShader,
+`precision highp float;
+
+uniform sampler2D texture;
+uniform vec2 topLeft;
+uniform vec2 bottomRight;
+uniform float strength;
+
+varying vec2 coord;
+
+void main() {
+    vec4 info = texture2D(texture, coord);
+
+    bool insideTopLeft = coord.x > topLeft.x && coord.y > topLeft.y;
+    bool insideBottomRight = coord.x < bottomRight.x && coord.y < bottomRight.y;
+    float drop = insideTopLeft && insideBottomRight ? 1.0 : 0.0;
+
+    info.r += drop * strength;
+
+    gl_FragColor = info;
+}`);
 
         this.updateProgram = createProgram(BaseWebGlProgram, this.gl, vertexShader,
-            `precision highp float;
+`precision highp float;
 
-            uniform sampler2D texture;
-            uniform vec2 delta;
+uniform sampler2D texture;
+uniform vec2 delta;
 
-            varying vec2 coord;
+varying vec2 coord;
 
-            void main() {
-            vec4 info = texture2D(texture, coord);
+void main() {
+    vec4 info = texture2D(texture, coord);
 
-            vec2 dx = vec2(delta.x, 0.0);
-            vec2 dy = vec2(0.0, delta.y);
+    vec2 dx = vec2(delta.x, 0.0);
+    vec2 dy = vec2(0.0, delta.y);
 
-            float average = (
-            texture2D(texture, coord - dx).r +
-            texture2D(texture, coord - dy).r +
-            texture2D(texture, coord + dx).r +
-            texture2D(texture, coord + dy).r
-            ) * 0.25;
+    float average = (
+        texture2D(texture, coord - dx).r +
+        texture2D(texture, coord - dy).r +
+        texture2D(texture, coord + dx).r +
+        texture2D(texture, coord + dy).r
+    ) * 0.25;
 
-            info.g += (average - info.r) * 2.0;
-            info.g *= 0.995;
-            info.r += info.g;
+    info.g += (average - info.r) * 2.0;
+    info.g *= 0.995;
+    info.r += info.g;
 
-            gl_FragColor = info;
-            }`);
+    gl_FragColor = info;
+}`);
         this.gl.uniform2fv(this.updateProgram.locations.delta, this.textureDelta);
 
         this.renderProgram = createProgram(RenderWebGlProgram, this.gl,
-            // Vertex shader
-            `precision highp float;
+// Vertex shader
+`precision highp float;
 
-            attribute vec2 vertex;
-            uniform vec2 topLeft;
-            uniform vec2 bottomRight;
-            uniform vec2 containerRatio;
-            varying vec2 ripplesCoord;
-            varying vec2 backgroundCoord;
-            void main() {
-            backgroundCoord = mix(topLeft, bottomRight, vertex * 0.5 + 0.5);
-            backgroundCoord.y = 1.0 - backgroundCoord.y;
-            ripplesCoord = vec2(vertex.x, -vertex.y) * containerRatio * 0.5 + 0.5;
-            gl_Position = vec4(vertex.x, -vertex.y, 0.0, 1.0);
-            }`,
+attribute vec2 vertex;
+uniform vec2 topLeft;
+uniform vec2 bottomRight;
+uniform vec2 containerRatio;
+varying vec2 ripplesCoord;
+varying vec2 backgroundCoord;
+void main() {
+    backgroundCoord = mix(topLeft, bottomRight, vertex * 0.5 + 0.5);
+    backgroundCoord.y = 1.0 - backgroundCoord.y;
+    ripplesCoord = vec2(vertex.x, -vertex.y) * containerRatio * 0.5 + 0.5;
+    gl_Position = vec4(vertex.x, -vertex.y, 0.0, 1.0);
+}`,
 
-            // Fragment shader
-            `precision highp float;
+// Fragment shader
+`precision highp float;
 
-            uniform sampler2D samplerBackground;
-            uniform sampler2D samplerRipples;
-            uniform vec2 delta;
+uniform sampler2D samplerBackground;
+uniform sampler2D samplerRipples;
+uniform vec2 delta;
 
-            uniform float perturbance;
-            varying vec2 ripplesCoord;
-            varying vec2 backgroundCoord;
+uniform float perturbance;
+varying vec2 ripplesCoord;
+varying vec2 backgroundCoord;
 
-            void main() {
-            float height = texture2D(samplerRipples, ripplesCoord).r;
-            float heightX = texture2D(samplerRipples, vec2(ripplesCoord.x + delta.x, ripplesCoord.y)).r;
-            float heightY = texture2D(samplerRipples, vec2(ripplesCoord.x, ripplesCoord.y + delta.y)).r;
-            vec3 dx = vec3(delta.x, heightX - height, 0.0);
-            vec3 dy = vec3(0.0, heightY - height, delta.y);
-            vec2 offset = -normalize(cross(dy, dx)).xz;
-            float specular = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 4.0);
-            gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) + specular;
-            }`);
+void main() {
+    float height = texture2D(samplerRipples, ripplesCoord).r;
+    float heightX = texture2D(samplerRipples, vec2(ripplesCoord.x + delta.x, ripplesCoord.y)).r;
+    float heightY = texture2D(samplerRipples, vec2(ripplesCoord.x, ripplesCoord.y + delta.y)).r;
+    vec3 dx = vec3(delta.x, heightX - height, 0.0);
+    vec3 dy = vec3(0.0, heightY - height, delta.y);
+    vec2 offset = -normalize(cross(dy, dx)).xz;
+    float specular = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 4.0);
+    gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) + specular;
+}`);
         this.gl.uniform2fv(this.renderProgram.locations.delta, this.textureDelta);
     }
 

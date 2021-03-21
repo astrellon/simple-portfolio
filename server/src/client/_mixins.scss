@@ -29,10 +29,15 @@
     background: $bg-light-card-colour;
     box-shadow: 0 1px 3px rgba($colour-darkGrey, 0.5);
 
-    transition-property: background;
+    transition-property: background, transform, box-shadow;
     @include cubic-transition();
 
     .dark-theme & {
         background: $bg-dark-card-colour;
+    }
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 8px rgba($colour-darkGrey, 0.3);
     }
 }
