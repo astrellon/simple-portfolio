@@ -172,6 +172,11 @@ function createImageData(width: number, height: number)
     }
 }
 
+function isPowerOf2(value: number)
+{
+    return (value & (value - 1)) == 0;
+}
+
 export default class Ripples
 {
     private readonly canvas: HTMLCanvasElement;
@@ -290,32 +295,69 @@ export default class Ripples
 		this.render();
     }
 
+    public loadBackground(url: string)
+    {
+        const gl = this.gl;
+
+        // Because images have to be downloaded over the internet
+        // they might take a moment until they are ready.
+        // Until then put a single pixel in the texture so we can
+        // use it immediately. When the image has finished downloading
+        // we'll update the texture with the contents of the image.
+        const level = 0;
+        const internalFormat = gl.RGBA;
+        const srcFormat = gl.RGBA;
+        const srcType = gl.UNSIGNED_BYTE;
+
+        const image = new Image();
+        image.onload = () =>
+        {
+            gl.bindTexture(gl.TEXTURE_2D, this.backgroundTexture);
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                srcFormat, srcType, image);
+
+            // WebGL1 has different requirements for power of 2 images
+            // vs non power of 2 images so check if the image is a
+            // power of 2 in both dimensions.
+            if (isPowerOf2(image.width) && isPowerOf2(image.height))
+            {
+                // Yes, it's a power of 2. Generate mips.
+                gl.generateMipmap(gl.TEXTURE_2D);
+            }
+            else
+            {
+                // No, it's not a power of 2. Turn off mips and set
+                // wrapping to clamp to edge
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            }
+        };
+        image.onerror = (e) =>
+        {
+            console.error('Failed to load background image', e);
+            this.setTransparentTexture();
+        }
+        image.src = url;
+    }
+
     private setupPointerEvents()
     {
-        var that = this;
-
         // function pointerEventsEnabled()
         // {
         //     return that.visible && that.running && that.interactive;
         // }
 
-        function dropAtPointer(pointer, big)
+        // Start listening to pointer events
+        const parent = this.canvas.parentElement;
+        if (!parent)
         {
-            // if (pointerEventsEnabled())
-            {
-                that.dropAtPointer(
-                    pointer,
-                    that.dropRadius * (big ? 1.5 : 1),
-                    (big ? 0.14 : 0.01)
-                );
-            }
+            return;
         }
 
-        // Start listening to pointer events
-        this.canvas.parentElement?.addEventListener('mousemove', (e: MouseEvent) =>
-        {
-            dropAtPointer(e, false);
-        });
+        parent.addEventListener('mousemove', this.dropAtPointer);
+        parent.addEventListener('touchstart', this.dropAtTouch);
+        parent.addEventListener('touchmove', this.dropAtTouch);
 
             // .on('touchmove.ripples touchstart.ripples', function (e)
             // {
@@ -333,17 +375,23 @@ export default class Ripples
             // });
     }
 
-    public dropAtPointer(pointer: MouseEvent, radius: number, strength: number)
+    public dropAtPointer = (e: MouseEvent) =>
     {
-        // var borderLeft = parseInt(this.$el.css('border-left-width')) || 0,
-        //     borderTop = parseInt(this.$el.css('border-top-width')) || 0;
-
         this.drop(
-            pointer.pageX,// - this.$el.offset().left - borderLeft,
-            pointer.pageY,// - this.$el.offset().top - borderTop,
-            radius,
-            strength
+            e.pageX,
+            e.pageY,
+            this.dropRadius,
+            0.01,
         );
+    }
+
+    public dropAtTouch = (e: TouchEvent) =>
+    {
+        const touches = e.changedTouches;
+        for (const touch of touches)
+        {
+            this.drop(touch.pageX, touch.pageY, this.dropRadius, 0.01);
+        }
     }
 
     private drop(x: number, y: number, radius: number, strength: number)
@@ -608,8 +656,8 @@ export default class Ripples
         this.renderProgram.topLeft[0] = 0;
         this.renderProgram.topLeft[1] = 0;
 
-        this.renderProgram.bottomRight[0] = this.canvas.width;
-        this.renderProgram.bottomRight[1] = this.canvas.height;
+        this.renderProgram.bottomRight[0] = this.canvas.width / maxSide;
+        this.renderProgram.bottomRight[1] = this.canvas.height / maxSide;
 
         this.renderProgram.containerRatio[0] = this.canvas.width / maxSide;
         this.renderProgram.containerRatio[1] = this.canvas.height / maxSide;

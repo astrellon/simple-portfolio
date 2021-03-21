@@ -36,7 +36,8 @@ export class App extends ClassComponent<Props>
             canvas.width = window.outerWidth;
             canvas.height = window.outerHeight;
             console.log(window.outerHeight);
-            this.ripple = new Ripples(canvas, 256);
+            this.ripple = new Ripples(canvas, 512);
+            this.ripple.loadBackground('/assets/bg2.jpg');
         }
     }
 

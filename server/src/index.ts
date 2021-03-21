@@ -21,7 +21,7 @@ for (const file of files)
     pageRenderer.store.execute(addData(pageData));
 }
 
-const server = new Server('localhost', 8000);
+const server = new Server('0.0.0.0', 8000);
 server.registerRoute('/client', (req, res) =>
 {
     fs.readFile(`./clientDeploy${req.url}`, (err, data) =>
