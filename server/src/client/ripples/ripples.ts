@@ -496,11 +496,11 @@ varying vec2 coord;
 void main() {
     vec4 info = texture2D(texture, coord);
 
-    bool insideTopLeft = coord.x > topLeft.x && coord.y > topLeft.y;
-    bool insideBottomRight = coord.x < bottomRight.x && coord.y < bottomRight.y;
-    float drop = insideTopLeft && insideBottomRight ? 1.0 : 0.0;
+    vec4 rect = vec4(topLeft, bottomRight);
+    vec2 hv = step(rect.xy, coord) * step(coord, rect.zw);
+    float onOff = hv.x * hv.y;
 
-    info.r += drop * strength;
+    info.r += onOff * strength;
 
     gl_FragColor = info;
 }`);
