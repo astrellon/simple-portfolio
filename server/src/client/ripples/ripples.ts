@@ -150,7 +150,10 @@ function createProgram<T extends BaseWebGlProgram>(ctor: new (id: WebGLProgram, 
         const location = gl.getUniformLocation(programId, name);
         if (!location)
         {
-            throw new Error('Failed to get location: ' + name);
+            //throw new Error('Failed to get location: ' + name);
+            console.warn('Failed to get location: ' + name);
+            continue;
+
         }
         locations[name] = location;
     }
@@ -363,13 +366,7 @@ export default class Ripples
 
     public dropAtPointer = (e: MouseEvent) =>
     {
-        // this.drop(
-        //     e.pageX,
-        //     e.pageY,
-        //     this.dropRadius,
-        //     0.01,
-        // );
-        this.dropQuad(e.pageX - 10, e.pageY - 10, 20, 20, 0.01);
+        this.drop(e.pageX, e.pageY, this.dropRadius, 0.01);
     }
 
     public dropAtTouch = (e: TouchEvent) =>
@@ -381,7 +378,7 @@ export default class Ripples
         }
     }
 
-    public dropQuad = (top: number, left: number, width: number, height: number, strength: number) =>
+    public dropQuad = (x: number, y: number, width: number, height: number, strength: number) =>
     {
         if (!this.dropBoxProgram)
         {
@@ -395,13 +392,13 @@ export default class Ripples
         const longestSide = Math.max(elWidth, elHeight);
 
         const topLeft = new Float32Array([
-            (2 * left - elWidth) / longestSide,
-            (elHeight - 2 * top) / longestSide
+            ((2 * x - elWidth) / longestSide) * 0.5 + 0.5,
+            ((elHeight - 2 * (y + height)) / longestSide) * 0.5 + 0.5
         ]);
 
         const bottomRight = new Float32Array([
-            (2 * (left + width) - elWidth) / longestSide,
-            (elHeight - 2 * (top + height)) / longestSide
+            ((2 * (x + width) - elWidth) / longestSide) * 0.5 + 0.5,
+            ((elHeight - 2 * y) / longestSide) * 0.5 + 0.5
         ]);
 
         gl.viewport(0, 0, this.resolution, this.resolution);
@@ -435,8 +432,8 @@ export default class Ripples
         radius = radius / longestSide;
 
         const dropPosition = new Float32Array([
-            (2 * x - elWidth) / longestSide,
-            (elHeight - 2 * y) / longestSide
+            ((2 * x - elWidth) / longestSide) * 0.5 + 0.5,
+            ((elHeight - 2 * y) / longestSide) * 0.5 + 0.5
         ]);
 
         gl.viewport(0, 0, this.resolution, this.resolution);
@@ -478,7 +475,7 @@ varying vec2 coord;
 void main() {
     vec4 info = texture2D(texture, coord);
 
-    float drop = max(0.0, 1.0 - length(center * 0.5 + 0.5 - coord) / radius);
+    float drop = max(0.0, 1.0 - length(center - coord) / radius);
     drop = 0.5 - cos(drop * PI) * 0.5;
 
     info.r += drop * strength;

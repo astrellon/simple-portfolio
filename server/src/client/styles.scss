@@ -97,12 +97,3 @@ button:disabled:hover {
     opacity: 0.4;
     cursor: not-allowed;
 }
-
-#canvas {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: -1;
-}
