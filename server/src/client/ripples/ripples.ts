@@ -182,6 +182,8 @@ function isPowerOf2(value: number)
 
 export default class Ripples
 {
+    public interactive: boolean = true;
+
     private readonly canvas: HTMLCanvasElement;
     private readonly gl: WebGLRenderingContext;
     private readonly textureDelta: Float32Array;
@@ -199,9 +201,8 @@ export default class Ripples
     private renderProgram: RenderWebGlProgram | null = null;
     private backgroundTexture: WebGLTexture | null = null;
 
-    private dropRadius: number = 20;
+    private dropRadius: number = 12;
     private perturbance: number = 0.03;
-    private interactive: boolean = true;
     private bufferWriteIndex: number = 0;
 	private bufferReadIndex: number = 1;
 
@@ -347,11 +348,6 @@ export default class Ripples
 
     private setupPointerEvents()
     {
-        // function pointerEventsEnabled()
-        // {
-        //     return that.visible && that.running && that.interactive;
-        // }
-
         // Start listening to pointer events
         const parent = this.canvas.parentElement;
         if (!parent)
@@ -366,15 +362,24 @@ export default class Ripples
 
     public dropAtPointer = (e: MouseEvent) =>
     {
-        this.drop(e.pageX, e.pageY, this.dropRadius, 0.01);
+        if (!this.interactive)
+        {
+            return;
+        }
+        this.drop(e.pageX, e.pageY, this.dropRadius, 0.005);
     }
 
     public dropAtTouch = (e: TouchEvent) =>
     {
+        if (!this.interactive)
+        {
+            return;
+        }
+
         const touches = e.changedTouches;
         for (const touch of touches)
         {
-            this.drop(touch.pageX, touch.pageY, this.dropRadius, 1);
+            this.drop(touch.pageX, touch.pageY, this.dropRadius, 0.01);
         }
     }
 
@@ -391,14 +396,14 @@ export default class Ripples
         const elHeight = this.canvas.height;
         const longestSide = Math.max(elWidth, elHeight);
 
-        const topLeft = new Float32Array([
-            ((2 * x - elWidth) / longestSide) * 0.5 + 0.5,
-            ((elHeight - 2 * (y + height)) / longestSide) * 0.5 + 0.5
+        const center = new Float32Array([
+            ((2 * (x + width * 0.5) - elWidth) / longestSide) * 0.5 + 0.5,
+            ((elHeight - 2 * (y + height * 0.5)) / longestSide) * 0.5 + 0.5
         ]);
 
-        const bottomRight = new Float32Array([
-            ((2 * (x + width) - elWidth) / longestSide) * 0.5 + 0.5,
-            ((elHeight - 2 * y) / longestSide) * 0.5 + 0.5
+        const boxSize = new Float32Array([
+            (width / longestSide) * 0.5,
+            (height / longestSide) * 0.5
         ]);
 
         gl.viewport(0, 0, this.resolution, this.resolution);
@@ -407,8 +412,8 @@ export default class Ripples
         this.bindTexture(this.textures[this.bufferReadIndex]);
 
         gl.useProgram(this.dropBoxProgram.id);
-        gl.uniform2fv(this.dropBoxProgram.locations.topLeft, topLeft);
-        gl.uniform2fv(this.dropBoxProgram.locations.bottomRight, bottomRight);
+        gl.uniform2fv(this.dropBoxProgram.locations.center, center);
+        gl.uniform2fv(this.dropBoxProgram.locations.boxSize, boxSize);
         gl.uniform1f(this.dropBoxProgram.locations.strength, strength);
 
         this.drawQuad();
@@ -483,24 +488,36 @@ void main() {
     gl_FragColor = info;
 }`);
 
+// from http://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
         this.dropBoxProgram = createProgram(BaseWebGlProgram, this.gl, vertexShader,
 `precision highp float;
 
 uniform sampler2D texture;
-uniform vec2 topLeft;
-uniform vec2 bottomRight;
+// uniform vec2 topLeft;
+// uniform vec2 bottomRight;
+
+uniform vec2 center;
+uniform vec2 boxSize;
 uniform float strength;
 
 varying vec2 coord;
 
+const float boxRounding = 0.01;
+const float edgeSoftness  = 0.005;
+
+float roundedBoxSDF(vec2 CenterPosition, vec2 Size, float Radius)
+{
+    return length(max(abs(CenterPosition)-Size+Radius,0.0))-Radius;
+}
+
 void main() {
     vec4 info = texture2D(texture, coord);
 
-    vec4 rect = vec4(topLeft, bottomRight);
-    vec2 hv = step(rect.xy, coord) * step(coord, rect.zw);
-    float onOff = hv.x * hv.y;
 
-    info.r += onOff * strength;
+    float distance 		= roundedBoxSDF(coord - center, boxSize, boxRounding);
+    float smoothedAlpha =  1.0-smoothstep(0.0, edgeSoftness * 200.0,distance * 100.0);
+
+    info.r += smoothedAlpha * strength;
 
     gl_FragColor = info;
 }`);
@@ -526,8 +543,8 @@ void main() {
         texture2D(texture, coord + dy).r
     ) * 0.25;
 
-    info.g += (average - info.r) * 2.0;
-    info.g *= 0.995;
+    info.g += (average - info.r);
+    info.g *= 0.998;
     info.r += info.g;
 
     gl_FragColor = info;
@@ -595,100 +612,6 @@ void main() {
 
     private computeTextureBoundaries()
     {
-        // var backgroundSize = this.$el.css('background-size');
-        // var backgroundAttachment = this.$el.css('background-attachment');
-        // var backgroundPosition = translateBackgroundPosition(this.$el.css('background-position'));
-
-        // // Here the 'container' is the element which the background adapts to
-        // // (either the chrome window or some element, depending on attachment)
-        // var container;
-        // if (backgroundAttachment == 'fixed') {
-        // 	container = { left: window.pageXOffset, top: window.pageYOffset };
-        // 	container.width = $window.width();
-        // 	container.height = $window.height();
-        // }
-        // else {
-        // 	container = this.$el.offset();
-        // 	container.width = this.$el.innerWidth();
-        // 	container.height = this.$el.innerHeight();
-        // }
-
-        // // TODO: background-clip
-        // if (backgroundSize == 'cover') {
-        // 	var scale = Math.max(container.width / this.backgroundWidth, container.height / this.backgroundHeight);
-
-        // 	var backgroundWidth = this.backgroundWidth * scale;
-        // 	var backgroundHeight = this.backgroundHeight * scale;
-        // }
-        // else if (backgroundSize == 'contain') {
-        // 	var scale = Math.min(container.width / this.backgroundWidth, container.height / this.backgroundHeight);
-
-        // 	var backgroundWidth = this.backgroundWidth * scale;
-        // 	var backgroundHeight = this.backgroundHeight * scale;
-        // }
-        // else {
-        // 	backgroundSize = backgroundSize.split(' ');
-        // 	var backgroundWidth = backgroundSize[0] || '';
-        // 	var backgroundHeight = backgroundSize[1] || backgroundWidth;
-
-        // 	if (isPercentage(backgroundWidth)) {
-        // 		backgroundWidth = container.width * parseFloat(backgroundWidth) / 100;
-        // 	}
-        // 	else if (backgroundWidth != 'auto') {
-        // 		backgroundWidth = parseFloat(backgroundWidth);
-        // 	}
-
-        // 	if (isPercentage(backgroundHeight)) {
-        // 		backgroundHeight = container.height * parseFloat(backgroundHeight) / 100;
-        // 	}
-        // 	else if (backgroundHeight != 'auto') {
-        // 		backgroundHeight = parseFloat(backgroundHeight);
-        // 	}
-
-        // 	if (backgroundWidth == 'auto' && backgroundHeight == 'auto') {
-        // 		backgroundWidth = this.backgroundWidth;
-        // 		backgroundHeight = this.backgroundHeight;
-        // 	}
-        // 	else {
-        // 		if (backgroundWidth == 'auto') {
-        // 			backgroundWidth = this.backgroundWidth * (backgroundHeight / this.backgroundHeight);
-        // 		}
-
-        // 		if (backgroundHeight == 'auto') {
-        // 			backgroundHeight = this.backgroundHeight * (backgroundWidth / this.backgroundWidth);
-        // 		}
-        // 	}
-        // }
-
-        // // Compute backgroundX and backgroundY in page coordinates
-        // var backgroundX = backgroundPosition[0];
-        // var backgroundY = backgroundPosition[1];
-
-        // if (isPercentage(backgroundX)) {
-        // 	backgroundX = container.left + (container.width - backgroundWidth) * parseFloat(backgroundX) / 100;
-        // }
-        // else {
-        // 	backgroundX = container.left + parseFloat(backgroundX);
-        // }
-
-        // if (isPercentage(backgroundY)) {
-        // 	backgroundY = container.top + (container.height - backgroundHeight) * parseFloat(backgroundY) / 100;
-        // }
-        // else {
-        // 	backgroundY = container.top + parseFloat(backgroundY);
-        // }
-
-        // var elementOffset = this.$el.offset();
-
-        // this.renderProgram.uniforms.topLeft = new Float32Array([
-        // 	(elementOffset.left - backgroundX) / backgroundWidth,
-        // 	(elementOffset.top - backgroundY) / backgroundHeight
-        // ]);
-        // this.renderProgram.uniforms.bottomRight = new Float32Array([
-        // 	this.renderProgram.uniforms.topLeft[0] + this.$el.innerWidth() / backgroundWidth,
-        // 	this.renderProgram.uniforms.topLeft[1] + this.$el.innerHeight() / backgroundHeight
-        // ]);
-
         if (!this.renderProgram)
         {
             return;
@@ -713,15 +636,15 @@ void main() {
             return;
         }
 
-		this.gl.viewport(0, 0, this.resolution, this.resolution);
+        this.gl.viewport(0, 0, this.resolution, this.resolution);
 
-		this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.framebuffers[this.bufferWriteIndex]);
-		this.bindTexture(this.textures[this.bufferReadIndex]);
-		this.gl.useProgram(this.updateProgram?.id);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.framebuffers[this.bufferWriteIndex]);
+        this.bindTexture(this.textures[this.bufferReadIndex]);
+        this.gl.useProgram(this.updateProgram.id);
 
-		this.drawQuad();
+        this.drawQuad();
 
-		this.swapBufferIndices();
+        this.swapBufferIndices();
     }
 
     private swapBufferIndices()

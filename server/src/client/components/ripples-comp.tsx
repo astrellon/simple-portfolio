@@ -15,6 +15,8 @@ export default class RipplesComp extends ClassComponent<Props>
     private removeOnHoverOver: RemoveListener | null = null;
     private removeOnHoverOut: RemoveListener | null = null;
 
+    private hoverCount: number = 0;
+
     public onMount()
     {
         if (typeof window === 'undefined')
@@ -33,8 +35,8 @@ export default class RipplesComp extends ClassComponent<Props>
 
         window.addEventListener('resize', this.onResize);
 
-        this.removeOnHoverOver = hoverOverElement.add(this.onHoverElement);
-        this.removeOnHoverOut = hoverOutElement.add(this.onHoverElement);
+        this.removeOnHoverOver = hoverOverElement.add(this.onHoverOver);
+        this.removeOnHoverOut = hoverOutElement.add(this.onHoverOut);
     }
 
     public onUnmount(finished: FinishUnmountHandler)
@@ -52,16 +54,38 @@ export default class RipplesComp extends ClassComponent<Props>
         return <canvas class='ripples' />
     }
 
-    private onHoverElement = (element: HTMLElement) =>
+    private onHoverOver = (element: HTMLElement) =>
     {
         if (!this.ripple)
         {
             return;
         }
 
+        this.hoverCount++;
+        this.onHoverElement(element, 0.01);
+    }
+
+    private onHoverOut = (element: HTMLElement) =>
+    {
+        if (!this.ripple)
+        {
+            return;
+        }
+
+        this.hoverCount--;
+        this.onHoverElement(element, -0.01);
+    }
+
+    private onHoverElement = (element: HTMLElement, strength: number) =>
+    {
+        if (!this.ripple)
+        {
+            return;
+        }
+
+        this.ripple.interactive = this.hoverCount <= 0;
         const bounds = element.getBoundingClientRect();
-        console.log('Hover change', element, bounds);
-        this.ripple.dropQuad(bounds.x, bounds.y, bounds.width, bounds.height, 0.005);
+        this.ripple.dropQuad(bounds.x, bounds.y, bounds.width, bounds.height, strength);
     }
 
     private onResize = () =>
