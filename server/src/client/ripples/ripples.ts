@@ -493,9 +493,6 @@ void main() {
 `precision highp float;
 
 uniform sampler2D texture;
-// uniform vec2 topLeft;
-// uniform vec2 bottomRight;
-
 uniform vec2 center;
 uniform vec2 boxSize;
 uniform float strength;
@@ -513,9 +510,8 @@ float roundedBoxSDF(vec2 CenterPosition, vec2 Size, float Radius)
 void main() {
     vec4 info = texture2D(texture, coord);
 
-
-    float distance 		= roundedBoxSDF(coord - center, boxSize, boxRounding);
-    float smoothedAlpha =  1.0-smoothstep(0.0, edgeSoftness * 200.0,distance * 100.0);
+    float distance = roundedBoxSDF(coord - center, boxSize, boxRounding);
+    float smoothedAlpha = 1.0-smoothstep(0.0, edgeSoftness * 200.0,distance * 100.0);
 
     info.r += smoothedAlpha * strength;
 
@@ -543,7 +539,7 @@ void main() {
         texture2D(texture, coord + dy).r
     ) * 0.25;
 
-    info.g += (average - info.r);
+    info.g += average - info.r;
     info.g *= 0.998;
     info.r += info.g;
 
@@ -556,11 +552,14 @@ void main() {
 `precision highp float;
 
 attribute vec2 vertex;
+
 uniform vec2 topLeft;
 uniform vec2 bottomRight;
 uniform vec2 containerRatio;
+
 varying vec2 ripplesCoord;
 varying vec2 backgroundCoord;
+
 void main() {
     backgroundCoord = mix(topLeft, bottomRight, vertex * 0.5 + 0.5);
     backgroundCoord.y = 1.0 - backgroundCoord.y;
@@ -574,8 +573,8 @@ void main() {
 uniform sampler2D samplerBackground;
 uniform sampler2D samplerRipples;
 uniform vec2 delta;
-
 uniform float perturbance;
+
 varying vec2 ripplesCoord;
 varying vec2 backgroundCoord;
 
