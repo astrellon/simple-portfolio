@@ -1,7 +1,6 @@
 @import '../mixins';
 
 .posts {
-    position: absolute;
     transition-property: transform, opacity;
     @include cubic-transition();
 

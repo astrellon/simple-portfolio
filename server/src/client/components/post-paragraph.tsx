@@ -11,11 +11,14 @@ export class PostParagraph extends ClassComponent<Props>
 {
     public render()
     {
-        const { text, pictures } = this.props.content;
+        const { text, pictures, list } = this.props.content;
 
         return <div>
             { pictures && pictures.map(picture => <PostPicture picture={picture} />) }
             { text }
+            { list && <ul>
+                {list.map(item => <li>{item}</li>)}
+            </ul>}
         </div>
     }
 }

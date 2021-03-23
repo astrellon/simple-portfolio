@@ -34,6 +34,7 @@ export interface PostPictureState
 export interface PostParagraphState
 {
     readonly text?: string;
+    readonly list?: string[];
     readonly pictures?: PostPictureState[];
 }
 
