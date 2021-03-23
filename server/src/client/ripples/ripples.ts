@@ -367,7 +367,7 @@ export default class Ripples
         {
             return;
         }
-        this.drop(e.pageX, e.pageY, this.dropRadius, 0.005);
+        this.drop(e.clientX, e.clientY, this.dropRadius, 0.005);
     }
 
     public dropAtTouch = (e: TouchEvent) =>
@@ -380,7 +380,7 @@ export default class Ripples
         const touches = e.changedTouches;
         for (const touch of touches)
         {
-            this.drop(touch.pageX, touch.pageY, this.dropRadius, 0.01);
+            this.drop(touch.clientX, touch.clientY, this.dropRadius, 0.01);
         }
     }
 
