@@ -200,6 +200,7 @@ export default class Ripples
     private updateProgram: BaseWebGlProgram | null = null;
     private renderProgram: RenderWebGlProgram | null = null;
     private backgroundTexture: WebGLTexture | null = null;
+    private backgroundSize: number = 1;
 
     private dropRadius: number = 12;
     private perturbance: number = 0.03;
@@ -321,6 +322,8 @@ export default class Ripples
             gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                 srcFormat, srcType, image);
 
+            this.backgroundSize = image.width;
+
             // WebGL1 has different requirements for power of 2 images
             // vs non power of 2 images so check if the image is a
             // power of 2 in both dimensions.
@@ -333,8 +336,6 @@ export default class Ripples
             {
                 // No, it's not a power of 2. Turn off mips and set
                 // wrapping to clamp to edge
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             }
         };
@@ -616,13 +617,14 @@ void main() {
             return;
         }
 
-        var maxSide = Math.max(this.canvas.width, this.canvas.height);
+        const maxSide = Math.max(this.canvas.width, this.canvas.height);
+        const resolutionScale = maxSide / this.backgroundSize;
 
         this.renderProgram.topLeft[0] = 0;
         this.renderProgram.topLeft[1] = 0;
 
-        this.renderProgram.bottomRight[0] = this.canvas.width / maxSide;
-        this.renderProgram.bottomRight[1] = this.canvas.height / maxSide;
+        this.renderProgram.bottomRight[0] = this.canvas.width / maxSide * resolutionScale;
+        this.renderProgram.bottomRight[1] = this.canvas.height / maxSide * resolutionScale;
 
         this.renderProgram.containerRatio[0] = this.canvas.width / maxSide;
         this.renderProgram.containerRatio[1] = this.canvas.height / maxSide;

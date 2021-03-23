@@ -22,7 +22,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
         <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
         <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
         <Footer />
-        <RipplesComp />
+        <RipplesComp darkTheme={darkTheme} />
     </main>
 }
 

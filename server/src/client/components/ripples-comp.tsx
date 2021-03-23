@@ -1,11 +1,13 @@
 import { RemoveListener } from "simple-signals";
 import { ClassComponent, FinishUnmountHandler, vdom } from "simple-tsx-vdom";
 import Ripples from "../ripples/ripples";
+import { store } from "../store";
 import './ripples-comp.scss';
 import { hoverOutElement, hoverOverElement } from "./signals";
 
 interface Props
 {
+    readonly darkTheme: boolean;
 }
 
 export default class RipplesComp extends ClassComponent<Props>
@@ -14,6 +16,7 @@ export default class RipplesComp extends ClassComponent<Props>
     private canvas: HTMLCanvasElement | null = null;
     private removeOnHoverOver: RemoveListener | null = null;
     private removeOnHoverOut: RemoveListener | null = null;
+    private darkTheme?: boolean;
 
     private hoverCount: number = 0;
 
@@ -30,7 +33,7 @@ export default class RipplesComp extends ClassComponent<Props>
         {
             this.onResize();
             this.ripple = new Ripples(this.canvas, 512);
-            this.ripple.loadBackground('/assets/bg2.jpg');
+            this.checkBackground(store.state().darkTheme);
         }
 
         window.addEventListener('resize', this.onResize);
@@ -51,7 +54,18 @@ export default class RipplesComp extends ClassComponent<Props>
 
     public render()
     {
-        return <canvas class='ripples' />
+        this.checkBackground(this.props.darkTheme);
+        return <canvas class='ripples' />;
+    }
+
+    private checkBackground = (nowDarkTheme: boolean) =>
+    {
+        if (this.ripple && nowDarkTheme !== this.darkTheme)
+        {
+            const url = nowDarkTheme ? '/assets/gridDark.png' : '/assets/gridBlue.png';
+            this.ripple.loadBackground(url);
+            this.darkTheme = nowDarkTheme;
+        }
     }
 
     private onHoverOver = (element: HTMLElement) =>
