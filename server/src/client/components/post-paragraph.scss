@@ -1,0 +1,20 @@
+.post-paragraph {
+    &__pictures {
+        display: flex;
+        flex-direction: column;
+
+        :not(:first-child) {
+            margin-top: 0.5rem;
+        }
+
+        &.is--left {
+            float: left;
+            margin-right: 2rem;
+        }
+
+        &.is--right {
+            float: right;
+            margin-left: 2rem;
+        }
+    }
+}

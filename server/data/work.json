@@ -9,7 +9,6 @@
                 "pictures": [{
                     "url": "/assets/rome2rioTickets_small.png",
                     "caption": "Caption text",
-                    "position": "right",
                     "fullSizeUrl": "/assets/rome2rioTickets.png"
                 }]
             },

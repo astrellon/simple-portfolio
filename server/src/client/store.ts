@@ -26,8 +26,7 @@ export interface PageStored extends PageState
 export interface PostPictureState
 {
     readonly url: Url;
-    readonly position: 'left' | 'right' | 'center';
-    readonly fullSizeUrl: Url;
+    readonly fullSizeUrl?: Url;
     readonly caption: string;
 }
 
@@ -36,6 +35,7 @@ export interface PostParagraphState
     readonly text?: string;
     readonly list?: string[];
     readonly pictures?: PostPictureState[];
+    readonly picturePosition?: 'left' | 'right' | 'center';
 }
 
 export interface PostState

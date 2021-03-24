@@ -12,9 +12,9 @@ export class PostPicture extends ClassComponent<Props>
 {
     public render()
     {
-        const { position, url, caption } = this.props.picture;
+        const { url, caption } = this.props.picture;
 
-        return <div class={`post-picture is--${position}`} onmouseenter={this.onMouseEnter} onmouseleave={this.onMouseLeave}>
+        return <div class='post-picture' onmouseenter={this.onMouseEnter} onmouseleave={this.onMouseLeave}>
             <img src={url} />
             {caption && <div class='post-picture__caption'>{caption}</div>}
         </div>
