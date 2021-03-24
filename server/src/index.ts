@@ -79,6 +79,10 @@ server.registerRoute('/assets', (req, res) =>
         {
             res.setHeader('Content-Type', 'image/png');
         }
+        else if (url.endsWith('.svg'))
+        {
+            res.setHeader('Content-Type', 'image/svg+xml');
+        }
         else
         {
             res.setHeader('Content-Type', 'application/octet-stream');

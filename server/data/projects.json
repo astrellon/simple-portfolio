@@ -9,6 +9,15 @@
             },
             {
                 "text": "Mostly for learning but it's also what this website is powered by."
+            },
+            {
+                "links": [{
+                    "url": "https://www.npmjs.com/package/simple-tsx-vdom",
+                    "icon": "npm"
+                }, {
+                    "url": "http://github.com/astrellon/simple-tsx-vdom",
+                    "icon": "github"
+                }]
             }
         ]
     },
@@ -22,6 +31,15 @@
             },
             {
                 "text": "Because I found Redux required too much boilerplate and needed more structure."
+            },
+            {
+                "links": [{
+                    "url": "https://www.npmjs.com/package/simple-data-store",
+                    "icon": "npm"
+                }, {
+                    "url": "http://github.com/astrellon/simple-data-store",
+                    "icon": "github"
+                }]
             }
         ]
     },

@@ -2,6 +2,7 @@ import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PostParagraphState } from "../store";
 import { PostPicture } from "./post-picture";
 import "./post-paragraph.scss";
+import PostLink from "./post-link";
 
 interface Props
 {
@@ -12,9 +13,9 @@ export class PostParagraph extends ClassComponent<Props>
 {
     public render()
     {
-        const { text, pictures, list, picturePosition } = this.props.content;
+        const { text, pictures, list, picturePosition, links } = this.props.content;
 
-        return <div>
+        return <div class='post-paragraph'>
             { pictures && <div class={`post-paragraph__pictures is--${picturePosition || 'right'}`}>
                 { pictures.map(picture => <PostPicture picture={picture} />) }
             </div> }
@@ -22,6 +23,9 @@ export class PostParagraph extends ClassComponent<Props>
             { list && <ul>
                 {list.map(item => <li>{item}</li>)}
             </ul>}
+            { links && <div class='post-paragraph__links'>
+                { links.map(link => <PostLink link={link} />) }
+            </div> }
         </div>
     }
 }

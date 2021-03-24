@@ -30,12 +30,19 @@ export interface PostPictureState
     readonly caption: string;
 }
 
+export interface PostLinkState
+{
+    readonly url: Url;
+    readonly icon: string;
+}
+
 export interface PostParagraphState
 {
     readonly text?: string;
     readonly list?: string[];
     readonly pictures?: PostPictureState[];
     readonly picturePosition?: 'left' | 'right' | 'center';
+    readonly links?: PostLinkState[];
 }
 
 export interface PostState
