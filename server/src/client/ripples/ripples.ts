@@ -587,7 +587,8 @@ void main() {
     vec3 dy = vec3(0.0, heightY - height, delta.y);
     vec2 offset = -normalize(cross(dy, dx)).xz;
     float specular = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 4.0);
-    gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) + specular;
+    vec4 specularColour = vec4(0.8 * specular, 0.9 * specular, 1.0 * specular, 1.0);
+    gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) * vec4(1.0 + specular * 16.0) + specularColour;
 }`);
         this.gl.uniform2fv(this.renderProgram.locations.delta, this.textureDelta);
     }
