@@ -16,13 +16,13 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme } = props.state;
+    const { pages, posts, selectedPageId, darkTheme, postsHeight } = props.state;
 
     return <div>
         <main class='container'>
             <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
             <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
-            <Footer />
+            <Footer postsHeight={postsHeight} />
         </main>
         <RipplesComp darkTheme={darkTheme} />
     </div>
