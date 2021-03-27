@@ -1,7 +1,6 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PageId, PageState, setDarkTheme, store } from "../store";
 import Button from "./button";
-import { ButtonGroup } from "./button-group";
 import NavbarPageButton from "./navbar-page-button";
 import './navbar.scss';
 
@@ -21,9 +20,9 @@ export class Navbar extends ClassComponent<Props>
 
         return <nav class='navbar'>
             <h1>Alan Lawrey</h1>
-            <ButtonGroup class='navbar__page-buttons'>
+            <div class='navbar__page-buttons'>
                 { pages.map(page => <NavbarPageButton active={page.id === selectedPageId} page={page} onClick={this.onClickPage} />) }
-            </ButtonGroup>
+            </div>
 
             <Button class='navbar__theme-button' active={darkTheme} onClick={this.toggleDarkTheme}>{darkTheme ? 'Dark' : 'Light'}</Button>
         </nav>

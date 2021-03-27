@@ -1,7 +1,7 @@
 @import '../mixins';
 
 .post-picture {
-    @include card();
+    @include card(true);
 
     width: 360px;
 

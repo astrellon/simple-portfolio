@@ -325,13 +325,7 @@ export default class Ripples
             // WebGL1 has different requirements for power of 2 images
             // vs non power of 2 images so check if the image is a
             // power of 2 in both dimensions.
-            if (isPowerOf2(image.width) && isPowerOf2(image.height))
-            {
-                // Yes, it's a power of 2. Generate mips.
-                gl.generateMipmap(gl.TEXTURE_2D);
-
-            }
-            else
+            if (!isPowerOf2(image.width) || !isPowerOf2(image.height))
             {
                 // No, it's not a power of 2. Turn off mips and set
                 // wrapping to clamp to edge

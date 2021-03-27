@@ -1,0 +1,31 @@
+@import '../variables';
+@import '../mixins';
+
+.navbar-page-button {
+    padding: 1rem;
+    color: $colour-darkGrey;
+    font-size: $font-size;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    opacity: 0.75;
+
+    transition-property: opacity;
+    @include cubic-transition();
+
+    &.is--active {
+        font-weight: bold;
+        border-bottom: 2px solid $colour-darkGrey;
+    }
+}
+
+.dark-theme {
+    .navbar-page-button {
+        color: $colour-lightGrey;
+
+        &.is--active {
+            border-bottom: 2px solid $colour-lightGrey;
+        }
+    }
+}

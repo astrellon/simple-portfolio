@@ -23,7 +23,7 @@
     }
 }
 
-@mixin card {
+@mixin card($includeHover) {
     padding: 1rem;
     border-radius: 4px;
     background: rgba($bg-light-card-colour, 0.5);
@@ -37,8 +37,10 @@
         background: rgba($bg-dark-card-colour, 0.5);
     }
 
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 8px rgba($colour-darkGrey, 0.3);
+    @if $includeHover == true {
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba($colour-darkGrey, 0.3);
+        }
     }
 }
