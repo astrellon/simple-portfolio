@@ -69,7 +69,6 @@ export interface State
     readonly posts: PostStateMap;
     readonly selectedPageId: string;
     readonly darkTheme: boolean;
-    readonly postsHeight: number;
 }
 
 export type DataStored = PageStored | PostStored;
@@ -93,11 +92,6 @@ export function setPosts(newPosts: PostState[]): Modifier<State>
         }
         return { posts }
     }
-}
-
-export function setPostsHeight(postsHeight: number): Modifier<State>
-{
-    return () => { return { postsHeight } }
 }
 
 export function setPages(pages: PageState[]): Modifier<State>

@@ -5,8 +5,7 @@ setStore(new DataStore<State>({
     pages: [],
     posts: {},
     selectedPageId: '',
-    darkTheme: false,
-    postsHeight: 0
+    darkTheme: false
 }));
 
 export function setInitialState(state: State): Modifier<State>

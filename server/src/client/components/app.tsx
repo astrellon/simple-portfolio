@@ -1,9 +1,10 @@
 import '../normalize.css';
 import '../styles.scss';
 import '../grid.scss';
+import './app.scss';
 
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
-import { PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
+import { PageId, PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 import { Posts } from "./posts";
@@ -16,13 +17,18 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme, postsHeight } = props.state;
+    const { pages, posts, selectedPageId, darkTheme } = props.state;
 
-    return <div>
-        <main class='container'>
+    // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
+
+    return <div class='app-wrapper'>
+        <main class='container app'>
             <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
-            <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
-            <Footer postsHeight={postsHeight} />
+            <div>
+                <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
+            </div>
+            <div class='app__spacer' />
+            <Footer />
         </main>
         <RipplesComp darkTheme={darkTheme} />
     </div>
@@ -36,5 +42,9 @@ function onPageChange(page: PageState)
     }
 
     window.history.pushState(pushedState, page.title, `/${page.id}`);
-    store.execute(setSelectedPageId(page.id));
+    store.execute(setSelectedPageId('' as PageId));
+    setTimeout(() =>
+    {
+        store.execute(setSelectedPageId(page.id));
+    }, 310);
 }

@@ -1,8 +1,4 @@
 @import '../mixins';
 
 .footer {
-    position: absolute;
-
-    @include cubic-transition();
-    transition-property: top;
 }
