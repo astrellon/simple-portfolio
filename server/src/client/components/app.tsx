@@ -17,7 +17,7 @@ interface Props
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme } = props.state;
+    const { pages, posts, selectedPageId, darkTheme, postsHeight } = props.state;
 
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
@@ -27,7 +27,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
             <div>
                 <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
             </div>
-            <div class='app__spacer' />
+            <div class='app__spacer' style={{'min-height': postsHeight + 'px'}}/>
             <Footer />
         </main>
         <RipplesComp darkTheme={darkTheme} />
@@ -42,9 +42,5 @@ function onPageChange(page: PageState)
     }
 
     window.history.pushState(pushedState, page.title, `/${page.id}`);
-    store.execute(setSelectedPageId('' as PageId));
-    setTimeout(() =>
-    {
-        store.execute(setSelectedPageId(page.id));
-    }, 310);
+    store.execute(setSelectedPageId(page.id));
 }

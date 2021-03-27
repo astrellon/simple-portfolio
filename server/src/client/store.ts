@@ -69,6 +69,7 @@ export interface State
     readonly posts: PostStateMap;
     readonly selectedPageId: string;
     readonly darkTheme: boolean;
+    readonly postsHeight: number;
 }
 
 export type DataStored = PageStored | PostStored;
@@ -79,6 +80,11 @@ export interface WindowHistory
 }
 
 ///////
+
+export function setPostsHeight(postsHeight: number): Modifier<State>
+{
+    return () => { return { postsHeight } }
+}
 
 export function setPosts(newPosts: PostState[]): Modifier<State>
 {

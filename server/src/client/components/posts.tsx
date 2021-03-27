@@ -1,5 +1,5 @@
 import { ClassComponent, FinishUnmountHandler, vdom } from "simple-tsx-vdom";
-import { PageState, PostState } from "../store";
+import { PageState, PostState, setPostsHeight, store } from "../store";
 import { Post } from "./post";
 import './posts.scss';
 
@@ -27,6 +27,8 @@ export class Posts extends ClassComponent<Props>
         {
             setTimeout(() => {
                 domElement.classList.add('mounted');
+                const bounds = domElement.getBoundingClientRect();
+                store.execute(setPostsHeight(bounds.height));
             }, 50);
         }
     }

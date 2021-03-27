@@ -26,7 +26,8 @@ export class PageRenderer
             pages: [],
             posts: {},
             selectedPageId: '',
-            darkTheme: false
+            darkTheme: false,
+            postsHeight: 0
         });
 
         this.store.subscribeAny(() =>
