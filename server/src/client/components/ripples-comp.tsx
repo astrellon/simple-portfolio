@@ -62,7 +62,7 @@ export default class RipplesComp extends ClassComponent<Props>
     {
         if (this.ripple && nowDarkTheme !== this.darkTheme)
         {
-            const url = nowDarkTheme ? '/assets/gridDark.png' : '/assets/gridBlue.png';
+            const url = nowDarkTheme ? '/assets/background3.png' : '/assets/background2.png';
             this.ripple.loadBackground(url);
             this.darkTheme = nowDarkTheme;
         }

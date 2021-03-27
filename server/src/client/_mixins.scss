@@ -8,7 +8,7 @@
 }
 
 @mixin default-text-shadow {
-    text-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
+    text-shadow: 0 2px 12px rgba(20, 30, 40, 0.3);
 
     .dark-theme & {
         text-shadow: 0 2px 12px rgba(0, 0, 0, 1);
@@ -16,7 +16,7 @@
 }
 
 @mixin default-box-shadow {
-    box-shadow: 0 2px 12px rgba(20, 30, 40, 0.2);
+    box-shadow: 0 2px 12px rgba(20, 30, 40, 0.3);
 
     .dark-theme & {
         box-shadow: 0 2px 12px rgba(0, 0, 0, 1);
@@ -26,14 +26,15 @@
 @mixin card {
     padding: 1rem;
     border-radius: 4px;
-    background: $bg-light-card-colour;
+    background: rgba($bg-light-card-colour, 0.5);
     box-shadow: 0 1px 3px rgba($colour-darkGrey, 0.5);
+    backdrop-filter: blur(8px);
 
     transition-property: background, transform, box-shadow;
     @include cubic-transition();
 
     .dark-theme & {
-        background: $bg-dark-card-colour;
+        background: rgba($bg-dark-card-colour, 0.5);
     }
 
     &:hover {

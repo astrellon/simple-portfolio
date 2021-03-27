@@ -104,6 +104,7 @@ class RenderWebGlProgram extends BaseWebGlProgram
     public topLeft: Float32Array = new Float32Array(2);
     public bottomRight: Float32Array = new Float32Array(2);
     public containerRatio: Float32Array = new Float32Array(2);
+    public scroll: number = 0;
 }
 
 function createProgram<T extends BaseWebGlProgram>(ctor: new (id: WebGLProgram, locations: LocationMap) => T, gl: WebGLRenderingContext, vertexSource: string, fragmentSource: string)
@@ -273,9 +274,6 @@ export default class Ripples
         this.initTexture();
         this.setTransparentTexture();
 
-        // Load the image either from the options or CSS rules
-        // this.loadImage();
-
         this.setupPointerEvents();
 
         // Set correct clear color and blend mode (regular alpha blending)
@@ -331,6 +329,7 @@ export default class Ripples
             {
                 // Yes, it's a power of 2. Generate mips.
                 gl.generateMipmap(gl.TEXTURE_2D);
+
             }
             else
             {
@@ -367,6 +366,7 @@ export default class Ripples
         {
             return;
         }
+
         this.drop(e.clientX, e.clientY, this.dropRadius, 0.005);
     }
 
@@ -557,13 +557,14 @@ attribute vec2 vertex;
 uniform vec2 topLeft;
 uniform vec2 bottomRight;
 uniform vec2 containerRatio;
+uniform float scroll;
 
 varying vec2 ripplesCoord;
 varying vec2 backgroundCoord;
 
 void main() {
     backgroundCoord = mix(topLeft, bottomRight, vertex * 0.5 + 0.5);
-    backgroundCoord.y = 1.0 - backgroundCoord.y;
+    backgroundCoord.y += scroll;
     ripplesCoord = vec2(vertex.x, -vertex.y) * containerRatio * 0.5 + 0.5;
     gl_Position = vec4(vertex.x, -vertex.y, 0.0, 1.0);
 }`,
@@ -586,9 +587,17 @@ void main() {
     vec3 dx = vec3(delta.x, heightX - height, 0.0);
     vec3 dy = vec3(0.0, heightY - height, delta.y);
     vec2 offset = -normalize(cross(dy, dx)).xz;
-    float specular = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 4.0);
-    vec4 specularColour = vec4(0.8 * specular, 0.9 * specular, 1.0 * specular, 1.0);
-    gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) * vec4(1.0 + specular * 16.0) + specularColour;
+    float specularPow = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 2.0);
+    float specular = smoothstep(0.1, 0.2, specularPow);
+
+    float specMult = specular * 0.1 + 1.0;
+    vec4 backgroundColour = texture2D(samplerBackground, backgroundCoord + offset * perturbance);
+    gl_FragColor = backgroundColour * vec4(specMult, specMult, specMult, 1.0);
+    if (backgroundColour.r < 0.5)
+    {
+        vec4 specularColour = vec4(0.03 * specular, 0.04 * specular, 0.06 * specular, 1.0);
+        gl_FragColor += specularColour;
+    }
 }`);
         this.gl.uniform2fv(this.renderProgram.locations.delta, this.textureDelta);
     }
@@ -620,6 +629,7 @@ void main() {
 
         const maxSide = Math.max(this.canvas.width, this.canvas.height);
         const resolutionScale = maxSide / this.backgroundSize;
+        const scroll = document.body.parentElement?.scrollTop || 0;
 
         this.renderProgram.topLeft[0] = 0;
         this.renderProgram.topLeft[1] = 0;
@@ -629,6 +639,8 @@ void main() {
 
         this.renderProgram.containerRatio[0] = this.canvas.width / maxSide;
         this.renderProgram.containerRatio[1] = this.canvas.height / maxSide;
+
+        this.renderProgram.scroll = scroll / maxSide;
     }
 
     private update()
@@ -692,6 +704,7 @@ void main() {
         this.bindTexture(this.textures[0], 1);
 
         gl.uniform1f(this.renderProgram.locations.perturbance, this.perturbance);
+        gl.uniform1f(this.renderProgram.locations.scroll, this.renderProgram.scroll);
         gl.uniform2fv(this.renderProgram.locations.topLeft, this.renderProgram.topLeft);
         gl.uniform2fv(this.renderProgram.locations.bottomRight, this.renderProgram.bottomRight);
         gl.uniform2fv(this.renderProgram.locations.containerRatio, this.renderProgram.containerRatio);
