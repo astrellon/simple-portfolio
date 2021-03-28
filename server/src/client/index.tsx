@@ -1,5 +1,5 @@
 import { vdom, render } from "simple-tsx-vdom";
-import { setSelectedPageId, WindowHistory, State, store } from "./store";
+import { setSelectedPageId, WindowHistory, State, store, setIsMobile } from "./store";
 import { App } from "./components/app";
 import { setInitialState } from './client-store';
 import { hydrate } from 'simple-tsx-vdom-hydration';
@@ -31,6 +31,12 @@ store.subscribe(state => state.darkTheme, (state, darkTheme) =>
 {
     document.cookie = `darkTheme=${darkTheme}`;
 });
+
+window.addEventListener('resize', () =>
+{
+    const isMobile = document.body.offsetWidth <= 480;
+    store.execute(setIsMobile(isMobile));
+})
 
 window.addEventListener('popstate', (event) =>
 {

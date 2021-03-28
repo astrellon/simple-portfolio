@@ -38,6 +38,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
             </div>
             <div class='app__spacer' style={{'min-height': postsHeight + 'px'}}/>
             <Footer />
+            { isMobile && <div class='app__mobile-spacer'/> }
             { isMobile && <MobileNavbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} /> }
         </main>
         <RipplesComp darkTheme={darkTheme} />

@@ -87,6 +87,19 @@ export function setPostsHeight(postsHeight: number): Modifier<State>
     return () => { return { postsHeight } }
 }
 
+export function setIsMobile(isMobile: boolean): Modifier<State>
+{
+    return (state: State) =>
+    {
+        if (state.isMobile !== isMobile)
+        {
+            return { isMobile }
+        }
+
+        return null;
+    }
+}
+
 export function setPosts(newPosts: PostState[]): Modifier<State>
 {
     return () =>

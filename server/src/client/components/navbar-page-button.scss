@@ -11,12 +11,12 @@
     border-bottom: 2px solid transparent;
     opacity: 0.75;
 
-    transition-property: opacity;
+    transition-property: opacity, border-bottom-color;
     @include cubic-transition();
 
     &.is--active {
         font-weight: bold;
-        border-bottom: 2px solid $colour-darkGrey;
+        border-bottom-color: $colour-darkGrey;
     }
 }
 
@@ -25,7 +25,7 @@
         color: $colour-lightGrey;
 
         &.is--active {
-            border-bottom: 2px solid $colour-lightGrey;
+            border-bottom-color: $colour-lightGrey;
         }
     }
 }
