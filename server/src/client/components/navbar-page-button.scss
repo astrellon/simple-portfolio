@@ -18,6 +18,10 @@
         font-weight: bold;
         border-bottom-color: $colour-darkGrey;
     }
+
+    &:visited {
+        color: $colour-darkGrey;
+    }
 }
 
 .dark-theme {
@@ -26,6 +30,10 @@
 
         &.is--active {
             border-bottom-color: $colour-lightGrey;
+        }
+
+        &:visited {
+            color: $colour-lightGrey;
         }
     }
 }

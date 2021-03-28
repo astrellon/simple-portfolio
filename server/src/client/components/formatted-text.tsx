@@ -45,14 +45,14 @@ export default class FormattedText extends ClassComponent<Props>
 
                     result.push(<a href={url}>{text}</a>);
                 }
-                else if (type === 'strong')
+                else if (type === 'strong' || type === 'h1' || type === 'h2')
                 {
-                    result.push(<strong>{value}</strong>);
+                    result.push(vdom(type, {}, value));
                 }
             }
             else
             {
-                result.push(<span>{token}</span>);
+                result.push(token);
             }
         }
 

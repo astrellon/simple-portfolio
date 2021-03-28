@@ -12,10 +12,9 @@ export class Post extends ClassComponent<Props>
 {
     public render()
     {
-        const { title, contents } = this.props.post;
+        const { contents } = this.props.post;
 
         return <div class='post'>
-            <h2>{title}</h2>
             <div>{contents.map(content => <PostParagraph content={content} />)}</div>
         </div>
     }

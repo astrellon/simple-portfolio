@@ -2,10 +2,10 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "Simple Virtual DOM",
         "contents": [
             {
                 "text": [
+                    "[h2](Simple Virtual DOM)",
                     "I made my own version of React",
                     "Mostly for learning but it's also what this website is powered by."
                 ]
@@ -24,10 +24,10 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "Simple Data Store",
         "contents": [
             {
                 "text": [
+                    "[h2](Simple Data Store)",
                     "I made my own version of Redux",
                     "Because I found Redux required too much boilerplate and needed more structure."
                 ]
@@ -46,10 +46,10 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "LOSS (Lua Operating SyStem)",
         "contents": [
             {
                 "text": [
+                    "[h2](LOSS: Lua Operating SyStem)",
                     "A project to create an operating system that's built around using Lua with the intention of being light weight. The main use case was for a game where you may want many simple in-game operating systems that look like a *NIX shell but without actually running a VM",
                     "Main features:"
                 ],
@@ -76,10 +76,10 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "Unity Voxel Engine",
         "contents": [
             {
                 "text": [
+                    "[h2](Unity Voxel Engine)",
                     "A [strong](small) voxel engine aim at being able to create and edit levels entirely within Unity. It performed well enough for the scale of the levels I wanted to created, however getting the editor tools to behave the way I wanted proved to be the most tricky aspect",
                     "Original intended to be in the style of [link](Might and Magic | https://en.wikipedia.org/wiki/Might_and_Magic) series which is why the original repository is called 'mm'",
                     "Main features:"
@@ -104,10 +104,10 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "RPG Game",
         "contents": [
             {
                 "text": [
+                    "[h2](RPG Game)",
                     "A topdown 2D RPG game engine written in C++ built using minimal dependencies for the purpose of learning.",
                     "This is a fairly old project now, but it does represent a lot of learning in terms of C++, integrating a scripting language, handling modding, dealing with complex UI and handling an audio system",
                     "Main features:"
@@ -122,6 +122,10 @@
                     "In game text uses a simplistic CSS and HTML system for rich text.",
                     "An in game map editor for creating new levels."
                 ],
+                "links": [{
+                    "url": "https://github.com/astrellon/rouge",
+                    "icon": "github"
+                }],
                 "pictures": [{
                     "url": "/assets/rouge.png",
                     "caption": "A screenshot of the RPG game",
@@ -131,7 +135,8 @@
                     "url": "/assets/rougeMapEditor.png",
                     "caption": "A screenshot of the in game map editor",
                     "fullSizeUrl": "/assets/rougeMapEditor.png"
-                }]
+                }],
+                "picturePosition": "left"
             }
         ]
     }

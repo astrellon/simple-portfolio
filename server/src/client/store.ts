@@ -49,7 +49,6 @@ export interface PostState
 {
     readonly id: string;
     readonly pageId: PageId;
-    readonly title: string;
     readonly contents: PostParagraphState[];
 }
 
