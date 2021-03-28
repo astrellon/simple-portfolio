@@ -91,6 +91,32 @@ h1,h2 {
     height: 1.6rem;
 }
 
+a {
+    color: $colour-light-link;
+    opacity: 0.85;
+
+    transition-property: opacity;
+    @include cubic-transition();
+
+    &:visited {
+        color: $colour-light-visited;
+    }
+
+    &:focus, &:hover {
+        opacity: 1;
+    }
+}
+
+.dark-theme {
+    a {
+        color: $colour-dark-link;
+
+        &:visited {
+            color: $colour-dark-visited;
+        }
+    }
+}
+
 input:disabled,
 button:disabled,
 input:disabled:hover,

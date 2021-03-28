@@ -46,30 +46,6 @@
     {
         "type": "post",
         "pageId": "projects",
-        "title": "Pirate Block Break Clone",
-        "contents": [
-            {
-                "text": "A one week project to build something from scratch and release it somewhere. Fairly basic block break clone with a bit of a twist.",
-                "pictures": [{
-                    "url": "/assets/pirating_small.jpg",
-                    "caption": "A screenshot of a pirate themed block break game.",
-                    "fullSizeUrl": "/assets/pirating.jpg"
-                }]
-            },
-            {
-                "text": "Main features:",
-                "list": [
-                    "Shoot cannonballs to break blocks, but don't let them hit you.",
-                    "Stores high score locally.",
-                    "Optional Slack support for posting scores.",
-                    "Cross platform for Linux, OSX and Windows, thanks to being built in Unity"
-                ]
-            }
-        ]
-    },
-    {
-        "type": "post",
-        "pageId": "projects",
         "title": "LOSS (Lua Operating SyStem)",
         "contents": [
             {
@@ -89,6 +65,12 @@
                     "A persistent file system for long term storage.",
                     "A Fuse implementation that allows for mounting the persistent hard drives and modifying them outside of the VM."
                 ]
+            },
+            {
+                "links": [{
+                    "url": "https://github.com/astrellon/loss",
+                    "icon": "github"
+                }]
             }
         ]
     },
@@ -98,12 +80,15 @@
         "title": "Unity Voxel Engine",
         "contents": [
             {
-                "text": "A small voxel engine aim at being able to create and edit levels entirely within Unity. It performed well enough for the scale of the levels I wanted to created, however getting the editor tools to behave the way I wanted proved to be the most tricky aspect",
+                "text": "A [strong](small) voxel engine aim at being able to create and edit levels entirely within Unity. It performed well enough for the scale of the levels I wanted to created, however getting the editor tools to behave the way I wanted proved to be the most tricky aspect",
                 "pictures": [{
                     "url": "/assets/mmVoxels_small.png",
                     "caption": "A screenshot of the Voxel Engine UI in Unity.",
                     "fullSizeUrl": "/assets/mmVoxels.png"
                 }]
+            },
+            {
+                "text": "Original intended to be in the style of [link](Might and Magic | https://en.wikipedia.org/wiki/Might_and_Magic) series which is why the original repository is called 'mm'"
             },
             {
                 "text": "Main features:",
@@ -112,6 +97,12 @@
                     "Multiple different shapes beyond a cube such as ramps and different corners to allow for smoother terrain.",
                     "Unity editing support for creating levels without needing additional tools."
                 ]
+            },
+            {
+                "links": [{
+                    "url": "https://github.com/astrellon/mm",
+                    "icon": "github"
+                }]
             }
         ]
     },
