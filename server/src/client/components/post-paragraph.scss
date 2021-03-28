@@ -29,4 +29,29 @@
     &__text-content {
         flex: 1;
     }
+
+    @media screen and (max-width: 480px) {
+        flex-direction: column;
+
+        &.is--left {
+            flex-direction: column;
+
+            .post-paragraph__pictures {
+                margin-right: 0;
+            }
+        }
+
+        &.is--right {
+            .post-paragraph__pictures {
+                margin-left: 0;
+            }
+        }
+
+        &__links {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+    }
 }
