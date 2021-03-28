@@ -8,6 +8,7 @@ html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     height: 100%;
+    overflow-y: scroll;
 }
 
 *,
@@ -19,18 +20,6 @@ html {
 * {
     scrollbar-width: thin;
     scrollbar-color: $colour-lightGrey $colour-primary;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: $colour-primary;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: $colour-lightGrey;
 }
 
 body {

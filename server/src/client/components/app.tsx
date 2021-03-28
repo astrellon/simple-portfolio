@@ -9,6 +9,7 @@ import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 import { Posts } from "./posts";
 import RipplesComp from './ripples-comp';
+import { AllIcons } from './icon';
 
 interface Props
 {
@@ -22,6 +23,7 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
     return <div class='app-wrapper'>
+        <AllIcons />
         <main class='container app'>
             <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
             <div>
