@@ -19,8 +19,7 @@ export class PostParagraph extends ClassComponent<Props>
         return <div class={`post-paragraph is--${picturePosition || 'right'}`}>
 
             { (text || list || links) && <div class='post-paragraph__text-content'>
-                { text &&
-                    text.map(t => <div><FormattedText text={t} /></div>) }
+                { this.processText() }
                 { list && <ul>
                     {list.map(item => <li><FormattedText text={item} /></li>)}
                 </ul>}
@@ -36,4 +35,56 @@ export class PostParagraph extends ClassComponent<Props>
         </div>
     }
 
+    private processText = () =>
+    {
+        const { text } = this.props.content;
+        if (!text)
+        {
+            return null;
+        }
+
+        const result: any[] = [];
+
+        let listChildren: string[] | null = null;
+        for (const line of text)
+        {
+            if (line.length === 0)
+            {
+                continue;
+            }
+
+            if (line[0] === '*')
+            {
+                if (listChildren === null)
+                {
+                    listChildren = [];
+                }
+
+                listChildren.push(line.substr(1).trimLeft());
+            }
+            else
+            {
+                if (listChildren !== null)
+                {
+                    result.push(this.createList(listChildren));
+                    listChildren = null;
+                }
+                result.push(<FormattedText text={line} />);
+            }
+        }
+
+        if (listChildren !== null)
+        {
+            result.push(this.createList(listChildren));
+        }
+
+        return result;
+    }
+
+    private createList = (items: string[]) =>
+    {
+        return (<ul>
+            { items.map(c => <li><FormattedText text={c} /></li>)}
+        </ul>);
+    }
 }
