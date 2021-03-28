@@ -70,6 +70,7 @@ export interface State
     readonly selectedPageId: string;
     readonly darkTheme: boolean;
     readonly postsHeight: number;
+    readonly isMobile: boolean;
 }
 
 export type DataStored = PageStored | PostStored;

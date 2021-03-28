@@ -1,36 +1,44 @@
-import '../normalize.css';
-import '../styles.scss';
-import '../grid.scss';
-import './app.scss';
+import "../normalize.css";
+import "../styles.scss";
+import "../grid.scss";
+import "./app.scss";
 
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
 import { PageId, PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 import { Posts } from "./posts";
-import RipplesComp from './ripples-comp';
-import { AllIcons } from './icon';
+import RipplesComp from "./ripples-comp";
+import { AllIcons } from "./icon";
+import MobileNavbar from "./mobile-navbar";
+import smoothscroll from "smoothscroll-polyfill"
 
 interface Props
 {
     readonly state: State;
 }
 
+if (typeof(window) !== 'undefined')
+{
+    smoothscroll.polyfill();
+}
+
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme, postsHeight } = props.state;
+    const { pages, posts, selectedPageId, darkTheme, postsHeight, isMobile } = props.state;
 
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
     return <div class='app-wrapper'>
         <AllIcons />
         <main class='container app'>
-            <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} />
+            { !isMobile && <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} /> }
             <div>
                 <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
             </div>
             <div class='app__spacer' style={{'min-height': postsHeight + 'px'}}/>
             <Footer />
+            { isMobile && <MobileNavbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} /> }
         </main>
         <RipplesComp darkTheme={darkTheme} />
     </div>
@@ -44,5 +52,24 @@ function onPageChange(page: PageState)
     }
 
     window.history.pushState(pushedState, page.title, `/${page.id}`);
-    store.execute(setSelectedPageId(page.id));
+    window.scroll({
+        behavior: 'smooth',
+        left: 0,
+        top: 0
+    });
+
+    scrollCheckTo(page.id);
+}
+
+function scrollCheckTo(pageId: PageId)
+{
+    const scrollTop = document.body.parentElement?.scrollTop || 0;
+    if (Math.abs(scrollTop) < 5)
+    {
+        store.execute(setSelectedPageId(pageId));
+    }
+    else
+    {
+        setTimeout(() => scrollCheckTo(pageId), 10);
+    }
 }

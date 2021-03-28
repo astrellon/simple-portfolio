@@ -8,6 +8,7 @@ import { DataStored, addData, State } from "./client/store";
 import { Server } from "./server";
 import { PageRenderer } from "./page-renderer";
 import * as cookie from "cookie";
+import DeviceDetector from "device-detector-js";
 
 let clientFileHtml = fs.readFileSync('./clientDeploy/index.html').toString();
 const pageRenderer = new PageRenderer(clientFileHtml);
@@ -20,6 +21,10 @@ for (const file of files)
     const pageData = JSON.parse(fs.readFileSync(combinedFilePath).toString()) as DataStored[];
     pageRenderer.store.execute(addData(pageData));
 }
+
+const deviceDetector = new DeviceDetector({
+    skipBotDetection: true
+});
 
 const server = new Server('0.0.0.0', 8000);
 server.registerRoute('/client', (req, res) =>
@@ -106,13 +111,21 @@ server.registerRoute('/', (req, res) =>
 
     if (pageRenderer.isPage(pageId))
     {
+        let isMobile = false;
+        if (req.headers['user-agent'])
+        {
+            const device = deviceDetector.parse(req.headers['user-agent']);
+            isMobile = device.device?.type === 'smartphone';
+        }
+
         res.setHeader("Content-Type", "text/html");
         res.setHeader("Cache-Control", "max-age=10");
         res.writeHead(200);
 
         let renderState: Partial<State> = {
             selectedPageId: pageId,
-            darkTheme: cookies.darkTheme === 'true'
+            darkTheme: cookies.darkTheme === 'true',
+            isMobile
         };
         res.end(pageRenderer.render(renderState));
     }

@@ -27,7 +27,8 @@ export class PageRenderer
             posts: {},
             selectedPageId: '',
             darkTheme: false,
-            postsHeight: 0
+            postsHeight: 0,
+            isMobile: false
         });
 
         this.store.subscribeAny(() =>

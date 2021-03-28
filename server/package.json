@@ -25,11 +25,13 @@
   },
   "dependencies": {
     "cookie": "^0.4.1",
+    "device-detector-js": "^2.2.7",
     "fast-deep-equal": "^3.1.3",
     "simple-signals": "^1.0.1",
     "simple-tsx-vdom": "^0.6.2",
     "simple-tsx-vdom-hydration": "^0.1.5",
-    "simple-tsx-vdom-ssr": "^0.2.1"
+    "simple-tsx-vdom-ssr": "^0.2.1",
+    "smoothscroll-polyfill": "^0.4.4"
   },
   "browserslist": [
     "defaults",
