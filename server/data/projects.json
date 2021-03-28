@@ -5,10 +5,10 @@
         "title": "Simple Virtual DOM",
         "contents": [
             {
-                "text": "I made my own version of React"
-            },
-            {
-                "text": "Mostly for learning but it's also what this website is powered by."
+                "text": [
+                    "I made my own version of React",
+                    "Mostly for learning but it's also what this website is powered by."
+                ]
             },
             {
                 "links": [{
@@ -27,10 +27,10 @@
         "title": "Simple Data Store",
         "contents": [
             {
-                "text": "I made my own version of Redux"
-            },
-            {
-                "text": "Because I found Redux required too much boilerplate and needed more structure."
+                "text": [
+                    "I made my own version of Redux",
+                    "Because I found Redux required too much boilerplate and needed more structure."
+                ]
             },
             {
                 "links": [{
@@ -49,28 +49,27 @@
         "title": "LOSS (Lua Operating SyStem)",
         "contents": [
             {
-                "text": "A project to create an operating system that's built around using Lua with the intention of being light weight. The main use case was for a game where you may want many simple in-game operating systems that look like a *NIX shell but without actually running a VM",
-                "pictures": [{
-                    "url": "/assets/loss.png",
-                    "caption": "An example of starting the VM with an init.d file that just prints some text.",
-                    "fullSizeUrl": "/assets/loss.png"
-                }]
-            },
-            {
-                "text": "Main features:",
+                "text": [
+                    "A project to create an operating system that's built around using Lua with the intention of being light weight. The main use case was for a game where you may want many simple in-game operating systems that look like a *NIX shell but without actually running a VM",
+                    "Main features:"
+                ],
                 "list": [
                     "A modified version of the Lua VM that supports running multiple Lua States in the same thread using Boost Coroutines",
                     "A virtual file system the supports mounting different types of file systems.",
                     "A RAMFS for virtual files (such as /dev and /proc)",
                     "A persistent file system for long term storage.",
                     "A Fuse implementation that allows for mounting the persistent hard drives and modifying them outside of the VM."
-                ]
-            },
-            {
+                ],
                 "links": [{
                     "url": "https://github.com/astrellon/loss",
                     "icon": "github"
-                }]
+                }],
+                "pictures": [{
+                    "url": "/assets/loss.png",
+                    "caption": "An example of starting the VM with an init.d file that just prints some text.",
+                    "fullSizeUrl": "/assets/loss.png"
+                }],
+                "picturePosition": "left"
             }
         ]
     },
@@ -80,28 +79,24 @@
         "title": "Unity Voxel Engine",
         "contents": [
             {
-                "text": "A [strong](small) voxel engine aim at being able to create and edit levels entirely within Unity. It performed well enough for the scale of the levels I wanted to created, however getting the editor tools to behave the way I wanted proved to be the most tricky aspect",
-                "pictures": [{
-                    "url": "/assets/mmVoxels_small.png",
-                    "caption": "A screenshot of the Voxel Engine UI in Unity.",
-                    "fullSizeUrl": "/assets/mmVoxels.png"
-                }]
-            },
-            {
-                "text": "Original intended to be in the style of [link](Might and Magic | https://en.wikipedia.org/wiki/Might_and_Magic) series which is why the original repository is called 'mm'"
-            },
-            {
-                "text": "Main features:",
+                "text": [
+                    "A [strong](small) voxel engine aim at being able to create and edit levels entirely within Unity. It performed well enough for the scale of the levels I wanted to created, however getting the editor tools to behave the way I wanted proved to be the most tricky aspect",
+                    "Original intended to be in the style of [link](Might and Magic | https://en.wikipedia.org/wiki/Might_and_Magic) series which is why the original repository is called 'mm'",
+                    "Main features:"
+                ],
                 "list": [
                     "Chunked editing and loading. Maps are stored as individual binary files which is optimised for updating chunks during editing.",
                     "Multiple different shapes beyond a cube such as ramps and different corners to allow for smoother terrain.",
                     "Unity editing support for creating levels without needing additional tools."
-                ]
-            },
-            {
+                ],
                 "links": [{
                     "url": "https://github.com/astrellon/mm",
                     "icon": "github"
+                }],
+                "pictures": [{
+                    "url": "/assets/mmVoxels_small.png",
+                    "caption": "A screenshot of the Voxel Engine UI in Unity.",
+                    "fullSizeUrl": "/assets/mmVoxels.png"
                 }]
             }
         ]
@@ -112,7 +107,21 @@
         "title": "RPG Game",
         "contents": [
             {
-                "text": "A topdown 2D RPG game engine written in C++ built using minimal dependencies for the purpose of learning.",
+                "text": [
+                    "A topdown 2D RPG game engine written in C++ built using minimal dependencies for the purpose of learning.",
+                    "This is a fairly old project now, but it does represent a lot of learning in terms of C++, integrating a scripting language, handling modding, dealing with complex UI and handling an audio system",
+                    "Main features:"
+                ],
+                "list": [
+                    "Tile based 2D graphics with a tile overlapping system for blending between tiles.",
+                    "Sound system that supports streaming OGG and WAV files.",
+                    "Lua Bindings for controlling just about every aspect of the game. From how a new game is created and loaded to how a door should behave when interacted with.",
+                    "Maps are created through Lua and has a mechanism for determining if the map is being played new or loaded from disk, allowing for map scripts to upgrade old save files.",
+                    "A dialogue system based on The Elder Scrolls: Morrowind with topics, keywords and actions bound to those keywords.",
+                    "HTML documentation taken from the C++ comments using a Python script.",
+                    "In game text uses a simplistic CSS and HTML system for rich text.",
+                    "An in game map editor for creating new levels."
+                ],
                 "pictures": [{
                     "url": "/assets/rouge.png",
                     "caption": "A screenshot of the RPG game",
@@ -123,22 +132,6 @@
                     "caption": "A screenshot of the in game map editor",
                     "fullSizeUrl": "/assets/rougeMapEditor.png"
                 }]
-            },
-            {
-                "text": "This is a fairly old project now, but it does represent a lot of learning in terms of C++, integrating a scripting language, handling modding, dealing with complex UI and handling an audio system"
-            },
-            {
-                "text": "Main features:",
-                "list": [
-                    "Tile based 2D graphics with a tile overlapping system for blending between tiles.",
-                    "Sound system that supports streaming OGG and WAV files.",
-                    "Lua Bindings for controlling just about every aspect of the game. From how a new game is created and loaded to how a door should behave when interacted with.",
-                    "Maps are created through Lua and has a mechanism for determining if the map is being played new or loaded from disk, allowing for map scripts to upgrade old save files.",
-                    "A dialogue system based on The Elder Scrolls: Morrowind with topics, keywords and actions bound to those keywords.",
-                    "HTML documentation taken from the C++ comments using a Python script.",
-                    "In game text uses a simplistic CSS and HTML system for rich text.",
-                    "An in game map editor for creating new levels."
-                ]
             }
         ]
     }

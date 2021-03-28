@@ -5,10 +5,10 @@
         "title": "About Me",
         "contents": [
             {
-                "text": "Software developer from Melbourne Australia"
+                "text": ["Software developer from Melbourne Australia"]
             },
             {
-                "text": "I like writing all kinds, frontend, backend, low-level, high-level, servers and games. In fact this website is a way for me to show off some of my frontend skills as I created the state-management, virtual dom and server for hosting/rendering it. It's all fairly basic but writing all the pieces is fun and a good learning experience."
+                "text": ["I like writing all kinds, frontend, backend, low-level, high-level, servers and games. In fact this website is a way for me to show off some of my frontend skills as I created the state-management, virtual dom and server for hosting/rendering it. It's all fairly basic but writing all the pieces is fun and a good learning experience."]
             }
         ]
     }

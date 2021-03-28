@@ -16,17 +16,23 @@ export class PostParagraph extends ClassComponent<Props>
     {
         const { text, pictures, list, picturePosition, links } = this.props.content;
 
-        return <div class='post-paragraph'>
-            { pictures && <div class={`post-paragraph__pictures is--${picturePosition || 'right'}`}>
+        return <div class={`post-paragraph is--${picturePosition || 'right'}`}>
+
+            { (text || list || links) && <div class='post-paragraph__text-content'>
+                { text &&
+                    text.map(t => <div><FormattedText text={t} /></div>) }
+                { list && <ul>
+                    {list.map(item => <li><FormattedText text={item} /></li>)}
+                </ul>}
+                { links && <div class='post-paragraph__links'>
+                    { links.map(link => <PostLink link={link} />) }
+                </div> }
+            </div>}
+
+            { pictures && <div class='post-paragraph__pictures'>
                 { pictures.map(picture => <PostPicture picture={picture} />) }
             </div> }
-            { text && <FormattedText text={text} /> }
-            { list && <ul>
-                {list.map(item => <li><FormattedText text={item} /></li>)}
-            </ul>}
-            { links && <div class='post-paragraph__links'>
-                { links.map(link => <PostLink link={link} />) }
-            </div> }
+
         </div>
     }
 

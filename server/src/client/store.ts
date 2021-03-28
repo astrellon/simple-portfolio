@@ -38,7 +38,7 @@ export interface PostLinkState
 
 export interface PostParagraphState
 {
-    readonly text?: string;
+    readonly text?: string[];
     readonly list?: string[];
     readonly pictures?: PostPictureState[];
     readonly picturePosition?: 'left' | 'right' | 'center';
