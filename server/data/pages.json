@@ -3,19 +3,16 @@
         "type": "page",
         "id": "about",
         "title": "About Me",
-        "singlePage": true,
         "defaultPage": true
     },
     {
         "type": "page",
         "id": "work",
-        "title": "Work",
-        "singlePage": false
+        "title": "Work"
     },
     {
         "type": "page",
         "id": "projects",
-        "title": "Projects",
-        "singlePage": false
+        "title": "Projects"
     }
 ]

@@ -5,14 +5,28 @@
         "contents": [
             {
                 "text": [
-                    "[h2](Rome2rio)",
-                    "Rome2rio is a travel searching website for showing you how to get from anyway to anyway in the world.",
-                    "I focused on adding timetables, buying tickets and working on internal tools for updating and creating routes live."
+                    "[post-header](Metro Trains Melbourne | SEP 2018 - NOV 2020)",
+                    "Metro Trains Melbourne needed a tool for monitoring real time voltages and currents for testing their new trains.",
+                    "This work combined hardware installed in the field (created by my co-worker) and a server with a front end (created by me)",
+                    "The hardware was made up of an industrial PC with a USB oscilloscope and 4G modem",
+                    "My work included:",
+                    "* Creating a backend in .Net Core that received the data.",
+                    "* Creating the frontend for use on a PC or mobile, built using Typescript and React.",
+                    "* Handling displaying live data of up to 120k samples on a mobile device.",
+                    "* Storing, retrieving and processes all the data, which ranged between 40k samples per second to 120k samples per second.",
+                    "* Utilising various Amazon Web Services such as EC2 to host the server, RDS to host the database for users and config, S3 for long term storage of raw data and SQS as a backup connection should the server go down."
                 ],
                 "pictures": [{
-                    "url": "/assets/rome2rioTickets_small.png",
-                    "caption": "Caption text",
-                    "fullSizeUrl": "/assets/rome2rioTickets.png"
+                    "url": "/assets/mtmGraphs_small.jpg",
+                    "caption": "An example of live data from field units being displayed on a web UI."
+                },
+                {
+                    "url": "/assets/mtmDataLookup_small.jpg",
+                    "caption": "An example of the data lookup UI for retrieving old data."
+                },
+                {
+                    "url": "/assets/mtmDataLookup2_small.jpg",
+                    "caption": "An example of old data that has ben looked up."
                 }]
             }
         ]
@@ -23,11 +37,58 @@
         "contents": [
             {
                 "text": [
-                    "[h2](miGenius)",
-                    "miGenius specialised in creating photo-real raytraced computer generated graphics.",
-                    "I work on the backend server, frontend Flash and JavaScript clients.",
-                    "We also created a Trimble SketchUp plugin for syncing the 3d scene with a server for showing a photoreal visualisation of what you are currently working on."
-                ]
+                    "[post-header](Rome2rio | OCT 2014 - JUL 2018)",
+                    "Rome2rio is a travel search website used for finding and comparing different routes from anywhere in the world. It specialised in ground transport.",
+                    "I focused on adding timetables, buying tickets and working on internal tools for updating and creating routes live.",
+                    "My work included:",
+                    "* Adding schedule information and the ability to buy tickets directly through Rome2rio for UK trains.",
+                    "* Internal tools for modifying their data through a web UI (not pictured).",
+                    "* Expanding upon and improved the infrastructure of their tooling.",
+                    "* For two years I mentored someone which resulted in them being able to shift from a non-dev role into a junior software dev."
+                ],
+                "pictures": [{
+                    "url": "/assets/rome2rioTickets_small.png",
+                    "caption": "An example of buying a train ticket in the UK directly with Rome2rio.",
+                    "fullSizeUrl": "/assets/rome2rioTickets.png"
+                },
+                {
+                    "url": "/assets/rome2rioSchedules.png",
+                    "caption": "An example of a train timetable in Melbourne."
+                }],
+                "picturePosition": "left"
+            }
+        ]
+    },
+    {
+        "type": "post",
+        "pageId": "work",
+        "contents": [
+            {
+                "text": [
+                    "[post-header](miGenius and mental images | JAN 2008 - OCT - 2014)",
+                    "mental images are a company that specialises in photographic rendering using ray and path tracing software.",
+                    "After 3 years the Melbourne office split off to form the company migenius which continued to do the same work and allowed for working on stand alone products.",
+                    "Bloom Unit was their first product and combined the ease of using SketchUp's 3d editing with real time photographic images.",
+                    "My work included:",
+                    "* The interface between SketchUp (ruby) and Bloom Unit (C++) for keeping the 3d scene in sync.",
+                    "* The UI (Internet Explorer 6) for adjusting the render settings and configuring the materials.",
+                    "We also worked on other projects for various clients:",
+                    "* Integrating Bloom Unit into Autodesk Revit for Oldcastle.",
+                    "* Web visualisation projects for Obayashi Corporation and Shimizu Corporation.",
+                    "* A product visualiser for Takemoto products. [link](Bottle 3d Visualiser | http://www3d1.takemotokk.co.jp/takemoto/?lang=en)",
+                    "* A product visualiser for Christ Jewellery. [link](Ring Configurator | https://www.christ.de/)"
+                ],
+                "pictures": [{
+                    "url": "/assets/bloomunit_small.jpg",
+                    "caption": "A screenshot of SketchUp with Bloom Unit running."},
+                {
+                    "url": "/assets/takemoto_small.jpg",
+                    "caption": "A screenshot of Takemoto's 3d Visualizer being used."
+                },
+                {
+                    "url": "/assets/christRingConfigurator_small.jpg",
+                    "caption": "A screenshot of Christ Ring Configurator being used."
+                }]
             }
         ]
     }

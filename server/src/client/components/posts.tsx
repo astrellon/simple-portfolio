@@ -55,8 +55,7 @@ export class Posts extends ClassComponent<Props>
 
         return <div class='posts'>
             <div class='posts__content'>
-                {category && !category.singlePage &&
-                    <h2>{category.title}</h2>}
+                { category && <h2>{category.title}</h2> }
                 {posts && posts.map(post => <Post key={post.id} post={post} />)}
             </div>
         </div>

@@ -1,9 +1,9 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PostParagraphState } from "../store";
 import { PostPicture } from "./post-picture";
-import "./post-paragraph.scss";
 import PostLink from "./post-link";
 import FormattedText from "./formatted-text";
+import "./post-paragraph.scss";
 
 interface Props
 {
@@ -20,9 +20,6 @@ export class PostParagraph extends ClassComponent<Props>
 
             { (text || list || links) && <div class='post-paragraph__text-content'>
                 { this.processText() }
-                { list && <ul>
-                    {list.map(item => <li><FormattedText text={item} /></li>)}
-                </ul>}
                 { links && <div class='post-paragraph__links'>
                     { links.map(link => <PostLink link={link} />) }
                 </div> }
@@ -69,7 +66,7 @@ export class PostParagraph extends ClassComponent<Props>
                     result.push(this.createList(listChildren));
                     listChildren = null;
                 }
-                result.push(<FormattedText text={line} />);
+                result.push(<div class='post-paragraph__line'>{FormattedText.processText(line)}</div>);
             }
         }
 
@@ -84,7 +81,7 @@ export class PostParagraph extends ClassComponent<Props>
     private createList = (items: string[]) =>
     {
         return (<ul>
-            { items.map(c => <li><FormattedText text={c} /></li>)}
+            { items.map(c => <li>{FormattedText.processText(c)}</li>)}
         </ul>);
     }
 }

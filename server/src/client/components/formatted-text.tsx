@@ -1,25 +1,20 @@
-import { ClassComponent, vdom } from "simple-tsx-vdom";
-
-interface Props
-{
-    readonly text: string;
-}
+import { vdom } from "simple-tsx-vdom";
+import "./formatted-text.scss";
 
 const formattingRegex = /(\[([^\]]+)\]\(([^\)]+)\))/;
 const globalFormattingRegex = new RegExp(formattingRegex, 'g');
 
-export default class FormattedText extends ClassComponent<Props>
+export default class FormattedText
 {
-    public render()
+    public static processText(text: string)
     {
-        return <span>{this.processText()}</span>
-    }
+        if (text.indexOf('[') < 0)
+        {
+            return [text];
+        }
 
-    private processText = () =>
-    {
-        const { text } = this.props;
-        const split = text.split(globalFormattingRegex);
         const result: any[] = [];
+        const split = text.split(globalFormattingRegex);
 
         for (let i = 0; i < split.length; i++)
         {
@@ -45,7 +40,17 @@ export default class FormattedText extends ClassComponent<Props>
 
                     result.push(<a href={url}>{text}</a>);
                 }
-                else if (type === 'strong' || type === 'h1' || type === 'h2')
+                else if (type === 'post-header')
+                {
+                    const headerSplit = value.split('|');
+
+                    const header = headerSplit[0].trim();
+                    const period = headerSplit[1].trim();
+                    result.push(<div class='post-header'>
+                        <h3>{header}</h3> <small>{period}</small>
+                    </div>);
+                }
+                else if (type === 'strong' || type === 'h1' || type === 'h2' || type === 'h3')
                 {
                     result.push(vdom(type, {}, value));
                 }

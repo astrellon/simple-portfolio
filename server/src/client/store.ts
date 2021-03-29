@@ -14,7 +14,6 @@ export interface PageState
 {
     readonly id: PageId;
     readonly title: string;
-    readonly singlePage: boolean;
 }
 
 export interface PageStored extends PageState

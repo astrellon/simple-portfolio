@@ -70,7 +70,7 @@ select {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='40' fill='%23555'><polygon points='0,0 60,0 30,40'/></svg>");
 }
 
-h1,h2 {
+h1,h2,h3 {
     @include default-text-shadow();
 }
 
