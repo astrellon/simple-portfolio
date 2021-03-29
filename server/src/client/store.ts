@@ -87,15 +87,7 @@ export function setPostsHeight(postsHeight: number): Modifier<State>
 
 export function setIsMobile(isMobile: boolean): Modifier<State>
 {
-    return (state: State) =>
-    {
-        if (state.isMobile !== isMobile)
-        {
-            return { isMobile }
-        }
-
-        return null;
-    }
+    return () => { return { isMobile } }
 }
 
 export function setPosts(newPosts: PostState[]): Modifier<State>
@@ -117,9 +109,9 @@ export function setPages(pages: PageState[]): Modifier<State>
     return () => { return { pages } }
 }
 
-export function setSelectedPageId(pageId: PageId): Modifier<State>
+export function setSelectedPageId(selectedPageId: PageId): Modifier<State>
 {
-    return () => { return { selectedPageId: pageId } }
+    return () => { return { selectedPageId } }
 }
 
 export function addData(newData: DataStored[]): Modifier<State>

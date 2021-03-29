@@ -21,6 +21,13 @@
                     "url": "/assets/alanlawrey.jpg",
                     "caption": "Me at Osaka Castle"
                 }]
+            },
+            {
+                "text": [
+                    "I also like learning about how things are done.",
+                    "As part of that I've re-created several systems for learning purposes.",
+                    "This website is an example of that, it is built using my own state management ([link](simple-data-store | https://www.npmjs.com/package/simple-data-store)), virtual dom ([link](simple-tsx-vdom | https://www.npmjs.com/package/simple-tsx-vdom)) with server side rendering and hydration."
+                ]
             }
         ]
     }

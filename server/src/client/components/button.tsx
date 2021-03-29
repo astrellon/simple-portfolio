@@ -13,9 +13,12 @@ export default class Button<T = void> extends ClassComponent<Props<T>>
 {
     public render()
     {
-        const { active } = this.props;
+        const { active, class: className } = this.props;
+        const combinedClass = `button ${className || ''}${active ? ' is--active' : ''}`;
 
-        return <button class={`button ${this.props.class || ''}${active ? ' is--active' : ''}`} onclick={this.onClick}>{this.children}</button>
+        return <button class={combinedClass} onclick={this.onClick}>
+            {this.children}
+        </button>
     }
 
     private onClick = () =>

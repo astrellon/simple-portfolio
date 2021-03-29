@@ -6,17 +6,28 @@
             {
                 "text": [
                     "[h3](Simple Virtual DOM)",
-                    "I made my own version of React",
-                    "Mostly for learning but it's also what this website is powered by."
-                ]
-            },
-            {
+                    "I made my own virtual DOM inspired by [link](React | https://reactjs.org/) and [link](Preact | https://preactjs.com/).",
+                    "It was created for learning but I wanted to take it to the point where I could build something non-trivial with it so this portfolio is the biggest example of it right now.",
+                    "Main features:",
+                    "* Small filesize (about 2.5kb after compression) written with no dependencies.",
+                    "* Written in fairly straight forward TypeScript that is all class based and can be extended.",
+                    "* TSX support (hence the name, also simple-vdom was taken).",
+                    "* Optional server-side rendering and client side hydration with the help of two extra packages.",
+                    "* A simple diffing algorithm to reduce DOM manipulations.",
+                    "* SVG support",
+                    "* Supports both class and functional components.",
+                    "While I have created this website it in it is definite [strong](NOT) indented for production use!"
+                ],
                 "links": [{
                     "url": "https://www.npmjs.com/package/simple-tsx-vdom",
                     "icon": "npm"
                 }, {
                     "url": "http://github.com/astrellon/simple-tsx-vdom",
                     "icon": "github"
+                }],
+                "pictures": [{
+                    "url": "/assets/simpleTsxVdom.jpg",
+                    "caption": "A code snippet from this website."
                 }]
             }
         ]
@@ -28,18 +39,69 @@
             {
                 "text": [
                     "[h3](Simple Data Store)",
-                    "I made my own version of Redux",
-                    "Because I found Redux required too much boilerplate and needed more structure."
-                ]
-            },
-            {
+                    "I like what [link](redux | https://redux.js.org/) and other functional state management libraries have done for UI but I found them too unstructured and too generalised. So I put together my own version that is still general but puts just enough structure to fulfil my needs.",
+                    "Unlike simple-tsx-vdom I have used simple-data-store in production to good effect, even without the extra features of browser devtools.",
+                    "Main features:",
+                    "* Small filesize (about 0.5kb after compression) written with no dependencies.",
+                    "* Immutable data structures.",
+                    "* Selector support, similar to reselect for redux."
+                ],
                 "links": [{
                     "url": "https://www.npmjs.com/package/simple-data-store",
                     "icon": "npm"
                 }, {
                     "url": "http://github.com/astrellon/simple-data-store",
                     "icon": "github"
-                }]
+                }],
+                "pictures": [{
+                    "url": "/assets/simpleDataStore.jpg",
+                    "caption": "An example of a really simple counter store."
+                }],
+                "picturePosition": "left"
+            }
+        ]
+    },
+    {
+        "type": "post",
+        "pageId": "projects",
+        "contents": [
+            {
+                "text": [
+                    "[h3](Space Doggo)",
+                    "A space adventure/exploration game that I've been working on for a while now.",
+                    "The main goal is to explore space and to find things. The scope is deliberately small so that [strong](hopefully) I'll finish it one day.",
+                    "Main features:",
+                    "* Features flying ships, floating around inside ships, teleporting to planets and walking around on planets.",
+                    "* Uses 'space portals' to view other star systems and seamlessly move between locations without loading screens.",
+                    "* A compendium of animals and things to fill up that makes use 'live photos' that takes a copy of each object in view so that they can be animated later on.",
+                    "* Written in C++ using [link](SFML | https://www.sfml-dev.org/) for cross platform support.",
+                    "* Makes use of [link](Box2D | https://box2d.org/) for physics, and [link](earcut | https://github.com/mapbox/earcut.hpp) for creating polygons for collisions.",
+                    "* Tile based planets that use [link](tmxlite | https://github.com/fallahn/tmxlite) for loading [link](Tiled | https://www.mapeditor.org/) maps.",
+                    "* Uses [link](yoga | http://yogalayout.com/) for UI layout and [link](Dear ImGui | https://github.com/ocornut/imgui) for debug UI.",
+                    "* All data is stored in plain JSON and loaded using [link](nlohmann JSON | https://github.com/nlohmann/json) for parsing.",
+                    "I've also been keeping a dev log about my progress and uploading them to YouTube."
+                ],
+                "links": [{
+                    "url": "https://github.com/astrellon/simple-space",
+                    "icon": "github"
+                },
+                {
+                    "url": "https://www.youtube.com/playlist?list=PLTf8ZRLo3EcP7A2US2CpGMTsEW_Kzezx8",
+                    "icon": "youtube"
+                }],
+                "pictures": [{
+                    "url": "/assets/spaceDoggo1.png",
+                    "caption": "A ship in space near a space station and star."
+                },
+                {
+                    "url": "/assets/spaceDoggo2.png",
+                    "caption": "Dialog with another dog on a space station. You can see your ship outside too."
+                },
+                {
+                    "url": "/assets/spaceDoggo3.png",
+                    "caption": "A space portal that lets you see into another star system."
+                }],
+                "picturePosition": "right"
             }
         ]
     },

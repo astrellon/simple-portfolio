@@ -1,7 +1,7 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import "./icon.scss";
 
-type IconType = 'github' | 'npm';
+type IconType = 'github' | 'npm' | 'youtube';
 
 interface Props
 {
@@ -35,6 +35,10 @@ export class AllIcons extends ClassComponent
 
                 <g id="npm">
                     <path d="M227.6 213.1H256v57.1h-28.4z"/><path d="M0 156v171.4h142.2V356H256v-28.6h256V156zm142.2 142.9h-28.4v-85.7H85.3v85.7H28.4V184.6h113.8zm142.2 0h-56.9v28.6h-56.9V184.6h113.8zm199.2 0h-28.4v-85.7h-28.4v85.7h-28.4v-85.7H370v85.7h-56.9V184.6h170.7v114.3z"/>
+                </g>
+
+                <g id="youtube">
+                    <path d="M508.64 148.79c0-45-33.1-81.2-74-81.2C379.24 65 322.74 64 265 64h-18c-57.6 0-114.2 1-169.6 3.6C36.6 67.6 3.5 104 3.5 149 1 184.59-.06 220.19 0 255.79q-.15 53.4 3.4 106.9c0 45 33.1 81.5 73.9 81.5 58.2 2.7 117.9 3.9 178.6 3.8q91.2.3 178.6-3.8c40.9 0 74-36.5 74-81.5 2.4-35.7 3.5-71.3 3.4-107q.34-53.4-3.26-106.9zM207 353.89v-196.5l145 98.2z"/>
                 </g>
             </defs>
         </svg>

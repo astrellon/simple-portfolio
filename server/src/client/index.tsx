@@ -35,7 +35,10 @@ store.subscribe(state => state.darkTheme, (state, darkTheme) =>
 window.addEventListener('resize', () =>
 {
     const isMobile = document.body.offsetWidth <= 480;
-    store.execute(setIsMobile(isMobile));
+    if (store.state().isMobile !== isMobile)
+    {
+        store.execute(setIsMobile(isMobile));
+    }
 })
 
 window.addEventListener('popstate', (event) =>
