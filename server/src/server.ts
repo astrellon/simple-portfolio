@@ -1,72 +1,228 @@
-import * as http from 'http';
+import DeviceDetector from "device-detector-js";
+import * as fs from "fs";
+import * as path from "path";
+import * as cookie from "cookie";
+import { exec } from "child_process";
+import DataStore from "simple-data-store";
+import { State, DataStored, clearLoadedData, addData } from "./client/store";
+import HttpServer from "./http-server";
+import PageRenderer from "./page-renderer";
+import { ServerConfig } from "./server-config";
 
-type RemoveRoute = () => void;
+const deviceDetector = new DeviceDetector({
+    skipBotDetection: true
+});
 
-interface Route
+export default class Server
 {
-    readonly routePattern: RegExp;
-    readonly callback: http.RequestListener;
-}
+    public readonly config: ServerConfig;
 
-export class Server
-{
-    public readonly hostname: string;
-    public readonly port: number;
-    public readonly server: http.Server;
+    private readonly store: DataStore<State>;
+    private readonly pageRenderer: PageRenderer;
+    private readonly httpServer: HttpServer;
 
-    private readonly routes: Route[] = [];
-
-    constructor(hostname: string, port: number)
+    constructor (config: ServerConfig)
     {
-        this.hostname = hostname;
-        this.port = port;
-        this.server = http.createServer(this.onServerRequestListener);
+        this.config = config;
+
+        this.store = new DataStore<State>({
+            pages: [],
+            posts: {},
+            selectedPageId: '',
+            darkTheme: false,
+            postsHeight: 0,
+            isMobile: false
+        });
+
+        const clientFileHtml = fs.readFileSync(path.join(this.config.clientDeployFolder, '/index.html')).toString();
+
+        this.pageRenderer = new PageRenderer(clientFileHtml, this.store);
+        this.httpServer = new HttpServer(this.config.host, this.config.port);
     }
 
-    public start(onStartCallback?: () => void)
+    public downloadFromGit()
     {
-        this.server.listen(this.port, this.hostname, onStartCallback);
-    }
-
-    public registerRoutePattern(routePattern: RegExp, callback: http.RequestListener): RemoveRoute
-    {
-        const route: Route = { routePattern, callback };
-        this.routes.push(route);
-
-        return () =>
+        return new Promise((resolve, reject) =>
         {
-            const index = this.routes.indexOf(route);
-            if (index >= 0)
+            const { gitRepoBranch, gitRepoUrl } = this.config;
+            exec(`./get-from-git.sh "${gitRepoBranch}" "${gitRepoUrl}"`, (err) =>
             {
-                this.routes.splice(index, 1);
+                if (err)
+                {
+                    console.error('Error downloading from git', err);
+                    reject(err);
+                }
+                else
+                {
+                    console.log('Done downloading from git');
+                    resolve(true);
+                }
+            });
+        })
+    }
+
+    public loadFromData()
+    {
+        this.store.execute(clearLoadedData())
+        const { dataFolder } = this.config;
+
+        if (fs.existsSync(dataFolder))
+        {
+            const files = fs.readdirSync(dataFolder);
+            for (const file of files)
+            {
+                const combinedFilePath = path.join(dataFolder, file);
+                console.log('Reading file:', combinedFilePath);
+                const pageData = JSON.parse(fs.readFileSync(combinedFilePath).toString()) as DataStored[];
+                this.store.execute(addData(pageData));
             }
         }
     }
 
-    public registerRoute(routeStart: string, callback: http.RequestListener): RemoveRoute
+    public setupServerRoutes()
     {
-        return this.registerRoutePattern(new RegExp('^' + routeStart), callback);
-    }
-
-    private onServerRequestListener = (req: http.IncomingMessage, res: http.ServerResponse) =>
-    {
-        if (typeof(req.url) !== 'string')
+        this.httpServer.registerRoute('/client', (req, res) =>
         {
-            res.writeHead(501);
-            res.end("Unknown request without a URL");
-            return;
-        }
-
-        for (const route of this.routes)
-        {
-            if (route.routePattern.test(req.url))
+            fs.readFile(`./clientDeploy${req.url}`, (err, data) =>
             {
-                route.callback(req, res);
+                if (err != null)
+                {
+                    res.writeHead(404);
+                    res.end();
+                    return;
+                }
+                if (req.url?.endsWith('.css'))
+                {
+                    res.setHeader('Content-Type', 'text/css');
+                }
+                else if (req.url?.endsWith('.js'))
+                {
+                    res.setHeader('Content-Type', 'text/javascript');
+                }
+                else
+                {
+                    res.setHeader('Content-Type', 'application/octet-stream');
+                }
+                res.setHeader("Cache-Control", "max-age=3600");
+
+                res.writeHead(200);
+                res.end(data);
+            });
+        });
+
+        this.httpServer.registerRoute('/assets', (req, res) =>
+        {
+            if (!req.url)
+            {
+                res.writeHead(404);
+                res.end();
                 return;
             }
-        }
 
-        res.writeHead(404);
-        res.end("Cannot find");
+            const url = req.url;
+
+            fs.readFile('.' + url, (err, data) =>
+            {
+                if (err != null)
+                {
+                    res.writeHead(404);
+                    res.end();
+                    return;
+                }
+
+                if (url.endsWith('.jpeg') || url.endsWith('.jpg'))
+                {
+                    res.setHeader('Content-Type', 'image/jpeg');
+                }
+                else if (url.endsWith('.png'))
+                {
+                    res.setHeader('Content-Type', 'image/png');
+                }
+                else if (url.endsWith('.svg'))
+                {
+                    res.setHeader('Content-Type', 'image/svg+xml');
+                }
+                else
+                {
+                    res.setHeader('Content-Type', 'application/octet-stream');
+                }
+                res.setHeader("Cache-Control", "max-age=3600");
+
+                res.writeHead(200);
+                res.end(data);
+            });
+        });
+
+        this.httpServer.registerRoute('/webhook', (req, res) =>
+        {
+            if (!req.url)
+            {
+                res.writeHead(500);
+                res.end();
+                return;
+            }
+
+            console.log('Webhook request');
+            this.downloadFromGit()
+                .then(() =>
+                {
+                    console.log('Updating from new downloaded data');
+                    this.loadFromData();
+                    res.writeHead(200);
+                    res.end();
+                })
+                .catch(() =>
+                {
+                    console.error('Failed to get new data');
+                    res.writeHead(500);
+                    res.end();
+                });
+        });
+
+        this.httpServer.registerRoute('/', (req, res) =>
+        {
+            let pageId = req.url?.substr(1) || '';
+            if (pageId === '')
+            {
+                pageId = this.pageRenderer.defaultPage();
+            }
+
+            const cookies = cookie.parse(req.headers.cookie || '');
+
+            if (this.pageRenderer.isPage(pageId))
+            {
+                let isMobile = false;
+                if (req.headers['user-agent'])
+                {
+                    const device = deviceDetector.parse(req.headers['user-agent']);
+                    isMobile = device.device?.type === 'smartphone';
+                }
+
+                res.setHeader("Content-Type", "text/html");
+                res.setHeader("Cache-Control", "max-age=10");
+                res.writeHead(200);
+
+                let renderState: Partial<State> = {
+                    selectedPageId: pageId,
+                    darkTheme: cookies.darkTheme === 'true',
+                    isMobile
+                };
+                res.end(this.pageRenderer.render(renderState));
+            }
+            else
+            {
+                res.setHeader("Content-Type", "text/html");
+                res.writeHead(404);
+                res.end('Not found');
+            }
+        });
+    }
+
+    public runServer()
+    {
+        this.httpServer.start(() =>
+        {
+            console.log(`Started portfolio server on ${this.httpServer.hostname}:${this.httpServer.port}`);
+        });
     }
 }

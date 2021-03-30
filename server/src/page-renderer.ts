@@ -12,24 +12,16 @@ interface PreviousRender
     readonly htmlText: string;
 }
 
-export class PageRenderer
+export default class PageRenderer
 {
-    public readonly rawClientHtml: string;
-    public readonly store: DataStore<State>;
-
+    private readonly rawClientHtml: string;
+    private readonly store: DataStore<State>;
     private previousRenders: PreviousRender[] = [];
 
-    constructor (rawClientHtml: string)
+    constructor (rawClientHtml: string, store: DataStore<State>)
     {
         this.rawClientHtml = rawClientHtml;
-        this.store = new DataStore<State>({
-            pages: [],
-            posts: {},
-            selectedPageId: '',
-            darkTheme: false,
-            postsHeight: 0,
-            isMobile: false
-        });
+        this.store = store;
 
         this.store.subscribeAny(() =>
         {

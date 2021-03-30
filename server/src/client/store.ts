@@ -80,6 +80,18 @@ export interface WindowHistory
 
 ///////
 
+export function clearLoadedData(): Modifier<State>
+{
+    return () =>
+    {
+        return {
+            pages: [],
+            posts: {},
+            selectedPageId: '' as PageId
+        }
+    }
+}
+
 export function setPostsHeight(postsHeight: number): Modifier<State>
 {
     return () => { return { postsHeight } }
