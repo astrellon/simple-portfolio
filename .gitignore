@@ -4,3 +4,5 @@
 /**/deploy/
 /**/.cache/
 /**/clientDeploy/
+/server/assets/
+/server/data/
