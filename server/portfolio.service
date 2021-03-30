@@ -1,0 +1,15 @@
+[Unit]
+Description=Portfolio Server
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+Environment="NODE_ENV=production"
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+WorkingDirectory=/home/ubuntu/server/server
+ExecStart="/home/ubuntu/server/server/start.sh"
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target

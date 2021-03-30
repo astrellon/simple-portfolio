@@ -6,3 +6,5 @@
 /**/clientDeploy/
 /server/assets/
 /server/data/
+/**/*.pem
+/**/*.tar.gz

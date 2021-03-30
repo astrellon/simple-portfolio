@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run buildClient && npm run startServer",
-    "startServer": "ts-node src/index.ts --jsx",
+    "prod": "npm install && npm run startServer",
+    "startServer": "ts-node ./src/index.ts --jsx",
     "buildClient": "rm -rf ./clientDeploy/ && parcel build -d ./clientDeploy ./src/client/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run buildClient"
   },
   "author": "Alan Lawrey",
   "license": "MIT",
