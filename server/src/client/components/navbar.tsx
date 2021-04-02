@@ -1,6 +1,8 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PageId, PageState, setDarkTheme, store } from "../store";
 import Button from "./button";
+import CircleButton from "./circle-button";
+import Menu from "./menu";
 import NavbarPageButton from "./navbar-page-button";
 import './navbar.scss';
 
@@ -24,7 +26,10 @@ export class Navbar extends ClassComponent<Props>
                 { pages.map(page => <NavbarPageButton active={page.id === selectedPageId} page={page} onClick={this.onClickPage} />) }
             </div>
 
-            <Button class='navbar__theme-button' active={darkTheme} onClick={this.toggleDarkTheme}>{darkTheme ? 'Dark' : 'Light'}</Button>
+            <Menu>
+                <CircleButton icon='cog' text={`${darkTheme ? 'Light' : 'Dark'} Theme`} onclick={this.toggleDarkTheme} />
+                <CircleButton icon='cog' text='Ripples' />
+            </Menu>
         </nav>
     }
 

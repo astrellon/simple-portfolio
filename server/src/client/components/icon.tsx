@@ -1,12 +1,13 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import "./icon.scss";
 
-type IconType = 'github' | 'npm' | 'youtube' | 'cog';
+export type IconType = 'github' | 'npm' | 'youtube' | 'cog';
 
 interface Props
 {
     readonly icon: IconType;
     readonly size?: number;
+    readonly class?: string;
 }
 
 const svgXmlNs = "http://www.w3.org/2000/svg";
@@ -23,7 +24,8 @@ export default class Icon extends ClassComponent<Props>
             style['width'] = style['height'] = `${size}px`;
         }
 
-        return <svg xmlns={svgXmlNs} style={style} viewBox='0 0 512 512' class='icon'>
+        const classNames = 'icon ' + (this.props.class || '');
+        return <svg xmlns={svgXmlNs} style={style} viewBox='0 0 512 512' class={classNames}>
             <use href={`#${icon}`}></use>
         </svg>
     }

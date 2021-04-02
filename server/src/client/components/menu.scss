@@ -1,0 +1,14 @@
+.menu {
+    position: relative;
+
+    &__dropdown {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        right: 0;
+    }
+
+    &__row {
+        margin-top: 2rem;
+    }
+}

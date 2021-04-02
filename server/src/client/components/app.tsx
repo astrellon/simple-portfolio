@@ -31,9 +31,9 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
 
     return <div class='app-wrapper'>
         <AllIcons />
-        <main class='container app'>
+        <main class='app'>
             { !isMobile && <Navbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} darkTheme={darkTheme} /> }
-            <div>
+            <div class='container'>
                 <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
             </div>
             <div class='app__spacer' style={{'min-height': postsHeight + 'px'}}/>

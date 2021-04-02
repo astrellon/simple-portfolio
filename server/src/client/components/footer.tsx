@@ -9,7 +9,7 @@ export class Footer extends ClassComponent<Props>
 {
     public render()
     {
-        return <footer class='footer'>
+        return <footer class='footer container'>
             Alan Lawrey 2021
         </footer>
     }
