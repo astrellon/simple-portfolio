@@ -110,6 +110,29 @@ export default class Server
             });
         });
 
+        this.httpServer.registerRoute('/favicon', (req, res) =>
+        {
+            fs.readFile(`./clientDeploy${req.url}`, (err, data) =>
+            {
+                if (err != null)
+                {
+                    res.writeHead(404);
+                    res.end();
+                    return;
+                }
+
+                if (req.url?.endsWith('.ico'))
+                {
+                    res.setHeader('Content-Type', 'image/x-icon');
+                }
+
+                res.setHeader("Cache-Control", "max-age=3600");
+
+                res.writeHead(200);
+                res.end(data);
+            });
+        })
+
         this.httpServer.registerRoute('/assets', (req, res) =>
         {
             if (!req.url)
