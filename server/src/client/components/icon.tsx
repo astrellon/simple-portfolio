@@ -23,10 +23,11 @@ const classesToAdd: { readonly [iconType: string]: string } = {
     'cog': 'fill-on-hover has-stroke',
     'youtube': 'fill-on-hover has-stroke',
     'ripples': 'has-fill',
-    'theme': 'fill-on-hover has-stroke'
+    'theme': 'theme-icon has-stroke'
 }
 
 const svgXmlNs = "http://www.w3.org/2000/svg";
+const viewbox = "0 0 512 512";
 
 export default class Icon extends ClassComponent<Props>
 {
@@ -46,7 +47,7 @@ export default class Icon extends ClassComponent<Props>
         {
             return <ThemeIcon class={classNames} />
         }
-        return <svg xmlns={svgXmlNs} style={style} viewBox='0 0 512 512' class={classNames}>
+        return <svg xmlns={svgXmlNs} style={style} viewBox={viewbox} class={classNames}>
             <use href={`#${icon}`}></use>
             { disabled && <DisableIcon /> }
         </svg>
@@ -60,17 +61,18 @@ class ThemeIcon extends ClassComponent<ThemeProps>
         const classNames = this.props.class;
         if (classNames?.includes('active'))
         {
-            this.gotoMoon();
+            setTimeout(() => this.gotoMoon());
         }
         else
         {
-            this.gotoSun();
+            setTimeout(() => this.gotoSun());
         }
 
-        return <svg class={classNames || ''} xmlns={svgXmlNs} viewBox="0 0 512 512">
+        return <svg class={classNames || ''} xmlns={svgXmlNs} viewBox={viewbox}>
             <g>
-                <animateTransform class='begin-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines=".5 0 .5 1" values="0 256 512 ; 180 256 512"/>
-                <animateTransform class='end-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines=".5 0 .5 1" values="180 256 512 ; 360 256 512"/>
+                <animateTransform class='begin-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines="0.7 0 0.3 1" values="0 256 512 ; 180 256 512"/>
+                <animateTransform class='end-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines="0.7 0 0.3 1" values="180 256 512 ; 360 256 512"/>
+
                 <path d="m291 571a187 187 0 00-187 187 187 187 0 00187 187 187 187 0 0098.51-28 164 164 0 01-125.5-159 164 164 0 01125-159 187 187 0 00-98-28z" stroke-linecap="round" />
                 <circle cx="256" cy="256" r="88" />
                 <g stroke-linecap="round">
@@ -148,7 +150,7 @@ class DisableIcon extends ClassComponent
 
     public render()
     {
-        return <svg xmlns={svgXmlNs} viewBox="0 0 512 512">
+        return <svg xmlns={svgXmlNs} viewBox={viewbox}>
             <path class="disabled-icon" d="M60,60 L452,452" stroke="#a50505" stroke-width="36" />
         </svg>
     }

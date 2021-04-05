@@ -20,10 +20,12 @@
         stroke: $colour-darkGrey;
     }
 
+    &.theme-icon,
     &.fill-on-hover {
         fill: transparent;
     }
 
+    &:hover.theme-icon,
     &.active.fill-on-hover,
     &:hover.fill-on-hover {
         fill: $colour-darkGrey;
@@ -55,6 +57,7 @@
             stroke: $colour-lightGrey;
         }
 
+        &:hover.theme-icon,
         &.active.fill-on-hover,
         &:hover.fill-on-hover {
             fill: $colour-lightGrey;
