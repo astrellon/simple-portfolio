@@ -25,6 +25,7 @@
         text-align: right;
         line-height: 32px;
         opacity: 0;
+        width: 100px;
         transform: translateX(-2rem);
 
         @include cubic-transition();
@@ -32,16 +33,6 @@
     }
 
     &__icon {
-        fill: $colour-darkGrey;
         opacity: 0.75;
-
-        @include cubic-transition();
-        transition-property: opacity, fill;
-    }
-}
-
-.dark-theme .circle-button {
-    &__icon {
-        fill: $colour-lightGrey;
     }
 }

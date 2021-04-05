@@ -1,6 +1,5 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
-import { PageId, PageState, setDarkTheme, store } from "../store";
-import Button from "./button";
+import { PageId, PageState, setDarkTheme, setEnableRipples, store } from "../store";
 import CircleButton from "./circle-button";
 import Menu from "./menu";
 import NavbarPageButton from "./navbar-page-button";
@@ -11,6 +10,7 @@ interface Props
     readonly selectedPageId: PageId;
     readonly pages: PageState[];
     readonly darkTheme: boolean;
+    readonly ripplesEnabled: boolean;
     readonly onPageChange: (page: PageState) => void;
 }
 
@@ -18,7 +18,7 @@ export class Navbar extends ClassComponent<Props>
 {
     public render()
     {
-        const { pages, selectedPageId, darkTheme } = this.props;
+        const { pages, selectedPageId, darkTheme, ripplesEnabled } = this.props;
 
         return <nav class='navbar'>
             <h1>Alan Lawrey</h1>
@@ -27,8 +27,8 @@ export class Navbar extends ClassComponent<Props>
             </div>
 
             <Menu>
-                <CircleButton icon='cog' text={`${darkTheme ? 'Light' : 'Dark'} Theme`} onclick={this.toggleDarkTheme} />
-                <CircleButton icon='cog' text='Ripples' />
+                <CircleButton icon='theme' text={`${darkTheme ? 'Light' : 'Dark'} Theme`} onclick={this.toggleDarkTheme} active={darkTheme} />
+                <CircleButton icon='ripples' text='Ripples' disableIcon={!ripplesEnabled} onclick={this.toggleRipples} />
             </Menu>
         </nav>
     }
@@ -41,5 +41,10 @@ export class Navbar extends ClassComponent<Props>
     private toggleDarkTheme = () =>
     {
         store.execute(setDarkTheme(!this.props.darkTheme));
+    }
+
+    private toggleRipples = () =>
+    {
+        store.execute(setEnableRipples(!this.props.ripplesEnabled));
     }
 }

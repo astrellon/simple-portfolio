@@ -7,7 +7,8 @@ setStore(new DataStore<State>({
     selectedPageId: '',
     darkTheme: false,
     postsHeight: 0,
-    isMobile: false
+    isMobile: false,
+    ripplesEnabled: true
 }));
 
 export function setInitialState(state: State): Modifier<State>

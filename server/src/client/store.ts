@@ -69,6 +69,7 @@ export interface State
     readonly darkTheme: boolean;
     readonly postsHeight: number;
     readonly isMobile: boolean;
+    readonly ripplesEnabled: boolean;
 }
 
 export type DataStored = PageStored | PostStored;
@@ -160,6 +161,10 @@ export function setDarkTheme(darkTheme: boolean): Modifier<State>
     return () => { return { darkTheme } }
 }
 
+export function setEnableRipples(ripplesEnabled: boolean): Modifier<State>
+{
+    return () => { return { ripplesEnabled } }
+}
 ///////
 
 export let store: DataStore<State>;

@@ -11,16 +11,32 @@ export default class Menu extends ClassComponent<Props>
 {
     private showMenu: boolean = false;
 
+    public hasChanged(newProps: Props): boolean
+    {
+        return true;
+    }
+
     public render()
     {
-        const classNames = 'menu ' + (this.props.class || '');
+        const classNames = `menu ${this.props.class || ''} ${this.showMenu ? 'active' : ''}`;
 
         return <div class={classNames}>
-            <CircleButton onclick={this.toggleMenu} icon='cog' />
+            <CircleButton onclick={this.toggleMenu} icon='cog' active={this.showMenu} />
 
-            { this.showMenu && <div class='menu__dropdown'>
-                { this.children.map(c => <div class='menu__row'>{c}</div>) }
-            </div> }
+            <div class='menu__dropdown'>
+                { this.children.map((c, index) =>
+                {
+                    let showIndex = index + 1;
+                    if (!this.showMenu)
+                    {
+                        showIndex = this.children.length - showIndex;
+                    }
+                    const style = {
+                        'transition-delay': (showIndex * 0.1) + 's'
+                    }
+                    return <div class='menu__row' style={style}>{c}</div>
+                }) }
+            </div>
         </div>
     }
 

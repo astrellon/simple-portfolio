@@ -31,7 +31,8 @@ export default class Server
             selectedPageId: '',
             darkTheme: false,
             postsHeight: 0,
-            isMobile: false
+            isMobile: false,
+            ripplesEnabled: true
         });
 
         const clientFileHtml = fs.readFileSync(path.join(this.config.clientDeployFolder, '/index.html')).toString();
@@ -228,7 +229,8 @@ export default class Server
                 let renderState: Partial<State> = {
                     selectedPageId: pageId,
                     darkTheme: cookies.darkTheme === 'true',
-                    isMobile
+                    isMobile,
+                    ripplesEnabled: cookies.ripplesDisabled !== 'true'
                 };
                 res.end(this.pageRenderer.render(renderState));
             }
