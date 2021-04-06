@@ -56,14 +56,28 @@ export interface PostStored extends PostState
     readonly type: "post";
 }
 
+export interface BackgroundStored
+{
+    readonly type: "background";
+    readonly backgroundType: "light" | "dark";
+    readonly url: string;
+}
+
 export interface PostStateMap
 {
     readonly [pageId: string]: PostState[];
 }
 
+export interface Backgrounds
+{
+    readonly light: string[];
+    readonly dark: string[];
+}
+
 export interface State
 {
     readonly pages: PageState[];
+    readonly backgrounds: Backgrounds;
     readonly posts: PostStateMap;
     readonly selectedPageId: string;
     readonly darkTheme: boolean;
@@ -72,7 +86,7 @@ export interface State
     readonly ripplesEnabled: boolean;
 }
 
-export type DataStored = PageStored | PostStored;
+export type DataStored = PageStored | PostStored | BackgroundStored;
 
 export interface WindowHistory
 {
@@ -125,35 +139,6 @@ export function setPages(pages: PageState[]): Modifier<State>
 export function setSelectedPageId(selectedPageId: PageId): Modifier<State>
 {
     return () => { return { selectedPageId } }
-}
-
-export function addData(newData: DataStored[]): Modifier<State>
-{
-    return (state: State) =>
-    {
-        let pages = [...state.pages];
-        let posts = {...state.posts};
-        let selectedPageId = state.selectedPageId;
-
-        for (const data of newData)
-        {
-            if (data.type === 'page')
-            {
-                pages.push(data);
-                if (data.defaultPage === true)
-                {
-                    selectedPageId = data.id;
-                }
-            }
-            else if (data.type === 'post')
-            {
-                const list = posts[data.pageId] || (posts[data.pageId] = [])
-                list.push(data);
-            }
-        }
-
-        return { pages, posts, selectedPageId }
-    }
 }
 
 export function setDarkTheme(darkTheme: boolean): Modifier<State>

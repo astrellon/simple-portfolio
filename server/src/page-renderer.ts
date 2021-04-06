@@ -64,6 +64,7 @@ export default class PageRenderer
             const parsedParent = parse(parent.hydrateToString());
 
             bodyEl.insertAdjacentHTML('afterbegin', `<script>window.__state=${JSON.stringify(state)}</script>`);
+            bodyEl.insertAdjacentHTML('beforebegin', this.createBackgroundStyles());
 
             bodyEl.childNodes.splice(0, 0, parsedParent);
             const htmlText = clientDoc.toString();
@@ -90,5 +91,29 @@ export default class PageRenderer
         }
 
         return undefined;
+    }
+
+    private createBackgroundStyles()
+    {
+        let lightThemeRule = '';
+        let darkThemeRule = '';
+        const { backgrounds }  = this.store.state();
+        if (backgrounds.light.length > 0)
+        {
+            const index = Math.floor(Math.random() * backgrounds.light.length);
+            lightThemeRule = `body { background-image: url('${backgrounds.light[index]}') }`;
+        }
+        if (backgrounds.dark.length > 0)
+        {
+            const index = Math.floor(Math.random() * backgrounds.dark.length);
+            darkThemeRule = `body.dark-theme { background-image: url('${backgrounds.dark[index]}') }`;
+        }
+
+        if (lightThemeRule && darkThemeRule)
+        {
+            return `<style>${lightThemeRule}\n${darkThemeRule}</style>`;
+        }
+
+        return '';
     }
 }

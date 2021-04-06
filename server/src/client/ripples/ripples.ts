@@ -600,7 +600,6 @@ void main() {
     {
         this.backgroundTexture = this.gl.createTexture();
         this.gl.bindTexture(this.gl.TEXTURE_2D, this.backgroundTexture);
-        this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
     }
@@ -634,7 +633,7 @@ void main() {
         this.renderProgram.containerRatio[0] = this.canvas.width / maxSide;
         this.renderProgram.containerRatio[1] = this.canvas.height / maxSide;
 
-        this.renderProgram.scroll = scroll / maxSide;
+        this.renderProgram.scroll = scroll / maxSide * resolutionScale;
     }
 
     private update()

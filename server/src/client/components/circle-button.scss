@@ -8,6 +8,10 @@
     display: block;
     cursor: pointer;
 
+    &.disabled {
+        cursor: default;
+    }
+
     &:hover {
         .circle-button__text {
             opacity: 1;

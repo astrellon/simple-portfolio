@@ -18,6 +18,10 @@
 
         transition-property: transform, opacity;
         @include cubic-transition();
+
+        &.disabled {
+            pointer-events: none;
+        }
     }
 
     >.circle-button {

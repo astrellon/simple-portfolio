@@ -3,11 +3,12 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cookie from "cookie";
 import { exec } from "child_process";
-import DataStore from "simple-data-store";
-import { State, DataStored, clearLoadedData, addData } from "./client/store";
+import DataStore, { Modifier } from "simple-data-store";
+import { State, DataStored, clearLoadedData, PostStateMap } from "./client/store";
 import HttpServer from "./http-server";
 import PageRenderer from "./page-renderer";
 import { ServerConfig } from "./server-config";
+import { Editable } from "./client/common-types";
 
 const deviceDetector = new DeviceDetector({
     skipBotDetection: true
@@ -32,7 +33,11 @@ export default class Server
             darkTheme: false,
             postsHeight: 0,
             isMobile: false,
-            ripplesEnabled: true
+            ripplesEnabled: true,
+            backgrounds: {
+                dark: [],
+                light: []
+            }
         });
 
         const clientFileHtml = fs.readFileSync(path.join(this.config.clientDeployFolder, '/index.html')).toString();
@@ -226,11 +231,19 @@ export default class Server
                 res.setHeader("Cache-Control", "max-age=10");
                 res.writeHead(200);
 
+                let ripplesEnabled = true;
+                if (typeof(cookies.ripplesEnabled) === 'string')
+                {
+                    ripplesEnabled = cookies.ripplesEnabled === 'true';
+                }
+
+                const darkTheme = cookies.darkTheme === 'true';
+
                 let renderState: Partial<State> = {
                     selectedPageId: pageId,
-                    darkTheme: cookies.darkTheme === 'true',
+                    darkTheme,
                     isMobile,
-                    ripplesEnabled: cookies.ripplesDisabled !== 'true'
+                    ripplesEnabled
                 };
                 res.end(this.pageRenderer.render(renderState));
             }
@@ -249,5 +262,63 @@ export default class Server
         {
             console.log(`Started portfolio server on ${this.httpServer.hostname}:${this.httpServer.port}`);
         });
+    }
+}
+
+function addData(newData: DataStored[]): Modifier<State>
+{
+    return (state: State) =>
+    {
+        let pages = state.pages;
+        let posts: Editable<PostStateMap> = state.posts;
+        let backgrounds = state.backgrounds;
+        let selectedPageId = state.selectedPageId;
+
+        for (const data of newData)
+        {
+            if (data.type === 'page')
+            {
+                if (pages === state.pages)
+                {
+                    pages = [ ...pages ];
+                }
+
+                pages.push(data);
+                if (data.defaultPage === true)
+                {
+                    selectedPageId = data.id;
+                }
+            }
+            else if (data.type === 'post')
+            {
+                if (posts === state.posts)
+                {
+                    posts = { ...posts };
+                }
+                const list = posts[data.pageId] || (posts[data.pageId] = [])
+                list.push(data);
+            }
+            else if (data.type === 'background')
+            {
+                if (backgrounds === state.backgrounds)
+                {
+                    backgrounds = {
+                        dark: [ ...state.backgrounds.dark],
+                        light:  [ ...state.backgrounds.light]
+                    }
+                }
+
+                if (data.backgroundType === 'dark')
+                {
+                    backgrounds.dark.push(data.url);
+                }
+                else if (data.backgroundType === 'light')
+                {
+                    backgrounds.light.push(data.url);
+                }
+            }
+        }
+
+        return { pages, posts, selectedPageId, backgrounds }
     }
 }

@@ -4,6 +4,10 @@ import { setStore, State } from "./store";
 setStore(new DataStore<State>({
     pages: [],
     posts: {},
+    backgrounds: {
+        dark: [],
+        light: []
+    },
     selectedPageId: '',
     darkTheme: false,
     postsHeight: 0,

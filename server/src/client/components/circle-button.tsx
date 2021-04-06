@@ -8,6 +8,7 @@ interface Props
     readonly text: string;
     readonly onclick: () => void;
     readonly active?: boolean;
+    readonly disabled?: boolean;
     readonly disableIcon?: boolean;
 }
 
@@ -15,9 +16,11 @@ export default class CircleButton extends ClassComponent<Props>
 {
     public render()
     {
-        const { icon, text, active, disableIcon } = this.props;
+        const { icon, text, active, disableIcon, disabled } = this.props;
 
-        return <div class='circle-button' onclick={this.onClick}>
+        const classNames = `circle-button ${disabled ? 'disabled' : ''}`;
+
+        return <div class={classNames} onclick={this.onClick}>
             <span class='circle-button__text'>{ text }</span>
             <Icon class='circle-button__icon' icon={icon} size={32} active={active} disabled={disableIcon} />
         </div>
@@ -25,6 +28,11 @@ export default class CircleButton extends ClassComponent<Props>
 
     private onClick = () =>
     {
+        if (this.props.disabled)
+        {
+            return;
+        }
+
         if (typeof(this.props.onclick) === 'function')
         {
             this.props.onclick();

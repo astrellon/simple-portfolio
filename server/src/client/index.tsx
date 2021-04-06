@@ -31,6 +31,10 @@ store.subscribe(state => state.darkTheme, (state, darkTheme) =>
 {
     document.cookie = `darkTheme=${darkTheme}`;
 });
+store.subscribe(state => state.ripplesEnabled, (state, ripplesEnabled) =>
+{
+    document.cookie = `ripplesEnabled=${ripplesEnabled}`;
+});
 
 window.addEventListener('resize', () =>
 {

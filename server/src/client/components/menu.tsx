@@ -19,6 +19,7 @@ export default class Menu extends ClassComponent<Props>
     public render()
     {
         const classNames = `menu ${this.props.class || ''} ${this.showMenu ? 'active' : ''}`;
+        const rowClassNames = `menu__row ${this.showMenu ? '' : 'disabled'}`;
 
         return <div class={classNames}>
             <CircleButton onclick={this.toggleMenu} icon='cog' active={this.showMenu} />
@@ -31,10 +32,10 @@ export default class Menu extends ClassComponent<Props>
                     {
                         showIndex = this.children.length - showIndex;
                     }
-                    const style = {
-                        'transition-delay': (showIndex * 0.1) + 's'
-                    }
-                    return <div class='menu__row' style={style}>{c}</div>
+
+                    const style = { 'transition-delay': (showIndex * 0.1) + 's' }
+
+                    return <div class={rowClassNames} style={style}>{c}</div>
                 }) }
             </div>
         </div>

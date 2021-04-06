@@ -1,14 +1,23 @@
 import { RemoveListener } from "simple-signals";
 import { ClassComponent, FinishUnmountHandler, vdom } from "simple-tsx-vdom";
 import Ripples from "../ripples/ripples";
-import { store } from "../store";
-import './ripples-comp.scss';
+import { Backgrounds, store } from "../store";
 import { hoverOutElement, hoverOverElement } from "./signals";
+import './ripples-comp.scss';
 
 interface Props
 {
     readonly darkTheme: boolean;
+    readonly backgrounds: Backgrounds;
 }
+
+function randomPick<T>(list: T[])
+{
+    const index = Math.floor(Math.random() * list.length);
+    return list[index];
+}
+
+let firstBackgroundCheck = true;
 
 export default class RipplesComp extends ClassComponent<Props>
 {
@@ -62,9 +71,25 @@ export default class RipplesComp extends ClassComponent<Props>
     {
         if (this.ripple && nowDarkTheme !== this.darkTheme)
         {
-            const url = nowDarkTheme ? '/assets/background3.png' : '/assets/background2.png';
-            this.ripple.loadBackground(url);
             this.darkTheme = nowDarkTheme;
+            if (firstBackgroundCheck && typeof(window) !== 'undefined')
+            {
+                const backgroundImageStyle = window.getComputedStyle(document.body).backgroundImage;
+                const backgroundUrl = backgroundImageStyle.substring(backgroundImageStyle.indexOf('/', 12), backgroundImageStyle.lastIndexOf('"'));
+
+                firstBackgroundCheck = false;
+
+                if (backgroundUrl)
+                {
+                    this.ripple.loadBackground(backgroundUrl);
+                    return;
+                }
+            }
+
+            const backgrounds = this.props.backgrounds;
+
+            const url = randomPick(nowDarkTheme ? backgrounds.dark : backgrounds.light);
+            this.ripple.loadBackground(url);
         }
     }
 

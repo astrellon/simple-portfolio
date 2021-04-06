@@ -24,7 +24,7 @@ if (typeof(window) !== 'undefined')
 
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme, postsHeight, isMobile, ripplesEnabled } = props.state;
+    const { pages, posts, selectedPageId, darkTheme, postsHeight, isMobile, ripplesEnabled, backgrounds } = props.state;
 
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
@@ -45,7 +45,9 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
             { isMobile && <div class='app__mobile-spacer'/> }
             { isMobile && <MobileNavbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} /> }
         </main>
-        <RipplesComp darkTheme={darkTheme} />
+
+        { ripplesEnabled &&
+        <RipplesComp darkTheme={darkTheme} backgrounds={backgrounds} /> }
     </div>
 }
 
