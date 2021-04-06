@@ -75,7 +75,7 @@ export default class RipplesComp extends ClassComponent<Props>
             if (firstBackgroundCheck && typeof(window) !== 'undefined')
             {
                 const backgroundImageStyle = window.getComputedStyle(document.body).backgroundImage;
-                const backgroundUrl = backgroundImageStyle.substring(backgroundImageStyle.indexOf('/', 12), backgroundImageStyle.lastIndexOf('"'));
+                const backgroundUrl = backgroundImageStyle.substring(backgroundImageStyle.indexOf('/', 14), backgroundImageStyle.lastIndexOf('"'));
 
                 firstBackgroundCheck = false;
 
