@@ -9,6 +9,7 @@ interface Props
 {
     readonly darkTheme: boolean;
     readonly backgrounds: Backgrounds;
+    readonly scrollElement: HTMLElement | undefined | null;
 }
 
 function randomPick<T>(list: T[])
@@ -69,27 +70,32 @@ export default class RipplesComp extends ClassComponent<Props>
 
     private checkBackground = (nowDarkTheme: boolean) =>
     {
-        if (this.ripple && nowDarkTheme !== this.darkTheme)
+        if (this.ripple)
         {
-            this.darkTheme = nowDarkTheme;
-            if (firstBackgroundCheck && typeof(window) !== 'undefined')
+            this.ripple.scrollElement = this.props.scrollElement;
+
+            if (nowDarkTheme !== this.darkTheme)
             {
-                const backgroundImageStyle = window.getComputedStyle(document.body).backgroundImage;
-                const backgroundUrl = backgroundImageStyle.substring(backgroundImageStyle.indexOf('/', 14), backgroundImageStyle.lastIndexOf('"'));
-
-                firstBackgroundCheck = false;
-
-                if (backgroundUrl)
+                this.darkTheme = nowDarkTheme;
+                if (firstBackgroundCheck && typeof (window) !== 'undefined')
                 {
-                    this.ripple.loadBackground(backgroundUrl);
-                    return;
+                    const backgroundImageStyle = window.getComputedStyle(document.body).backgroundImage;
+                    const backgroundUrl = backgroundImageStyle.substring(backgroundImageStyle.indexOf('/', 14), backgroundImageStyle.lastIndexOf('"'));
+
+                    firstBackgroundCheck = false;
+
+                    if (backgroundUrl)
+                    {
+                        this.ripple.loadBackground(backgroundUrl);
+                        return;
+                    }
                 }
+
+                const backgrounds = this.props.backgrounds;
+
+                const url = randomPick(nowDarkTheme ? backgrounds.dark : backgrounds.light);
+                this.ripple.loadBackground(url);
             }
-
-            const backgrounds = this.props.backgrounds;
-
-            const url = randomPick(nowDarkTheme ? backgrounds.dark : backgrounds.light);
-            this.ripple.loadBackground(url);
         }
     }
 

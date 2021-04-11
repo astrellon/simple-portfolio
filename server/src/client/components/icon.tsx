@@ -73,7 +73,8 @@ class ThemeIcon extends ClassComponent<ThemeProps>
                 <animateTransform class='begin-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines="0.7 0 0.3 1" values="0 256 512 ; 180 256 512"/>
                 <animateTransform class='end-animation' attributeName="transform" type="rotate" dur="0.5" repeatCount="1" fill="freeze" calcMode="spline" begin="indefinite" keySplines="0.7 0 0.3 1" values="180 256 512 ; 360 256 512"/>
 
-                <path d="m291 571a187 187 0 00-187 187 187 187 0 00187 187 187 187 0 0098.51-28 164 164 0 01-125.5-159 164 164 0 01125-159 187 187 0 00-98-28z" stroke-linecap="round" />
+                <path d="m304.84 875.39c55.461-32.017 74.461-102.93 42.442-158.39-32.019-55.459-102.93-74.461-158.39-42.442-18.693 10.782-34.007 26.566-44.218 45.577 45.725-25.14 111.73-9.7728 137.78 35.351 26.052 45.124 18.349 106.14-38.922 135.26 21.462.65931 42.686-4.6539 61.306-15.347z" stroke-linecap="round" stroke-linejoin="round"/>
+
                 <circle cx="256" cy="256" r="88" />
                 <g stroke-linecap="round">
                     <path d="m256 44v81" />

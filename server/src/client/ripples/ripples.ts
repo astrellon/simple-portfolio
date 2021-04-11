@@ -184,6 +184,7 @@ function isPowerOf2(value: number)
 export default class Ripples
 {
     public interactive: boolean = true;
+    public scrollElement: HTMLElement | undefined | null;
 
     private readonly canvas: HTMLCanvasElement;
     private readonly gl: WebGLRenderingContext;
@@ -622,7 +623,7 @@ void main() {
 
         const maxSide = Math.max(this.canvas.width, this.canvas.height);
         const resolutionScale = maxSide / this.backgroundSize;
-        const scroll = document.body.parentElement?.scrollTop || 0;
+        const scroll = this.scrollElement ? this.scrollElement.scrollTop : 0;
 
         this.renderProgram.topLeft[0] = 0;
         this.renderProgram.topLeft[1] = 0;

@@ -4,7 +4,7 @@ import "../grid.scss";
 import "./app.scss";
 
 import { FunctionalComponent, vdom } from "simple-tsx-vdom";
-import { PageId, PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
+import { PageState, setSelectedPageId, State, store, WindowHistory } from "../store";
 import { Navbar } from "./navbar";
 import { Posts } from "./posts";
 import RipplesComp from "./ripples-comp";
@@ -17,9 +17,18 @@ interface Props
     readonly state: State;
 }
 
+let postsContainerEl: HTMLElement | null = null;
+let htmlEl: HTMLElement | null = null;
+
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
     const { pages, posts, selectedPageId, darkTheme, isMobile, ripplesEnabled, backgrounds } = props.state;
+
+    if (postsContainerEl == undefined && typeof(window) !== 'undefined')
+    {
+        postsContainerEl = document.querySelector('.app__post-container');
+        htmlEl = document.body.parentElement;
+    }
 
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
@@ -48,7 +57,10 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
         </main>
 
         { ripplesEnabled &&
-        <RipplesComp darkTheme={darkTheme} backgrounds={backgrounds} /> }
+        <RipplesComp
+            darkTheme={darkTheme}
+            backgrounds={backgrounds}
+            scrollElement={isMobile ? postsContainerEl : htmlEl} /> }
     </div>
 }
 
