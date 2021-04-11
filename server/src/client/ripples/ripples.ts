@@ -349,9 +349,9 @@ export default class Ripples
             return;
         }
 
-        parent.addEventListener('mousemove', this.dropAtPointer);
-        parent.addEventListener('touchstart', this.dropAtTouch);
-        parent.addEventListener('touchmove', this.dropAtTouch);
+        parent.addEventListener('mousemove', this.dropAtPointer, { passive: true });
+        parent.addEventListener('touchstart', this.dropAtTouch, { passive: true });
+        parent.addEventListener('touchmove', this.dropAtTouch, { passive: true });
     }
 
     public dropAtPointer = (e: MouseEvent) =>
