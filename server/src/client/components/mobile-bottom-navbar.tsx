@@ -1,7 +1,7 @@
 import { ClassComponent, vdom } from "simple-tsx-vdom";
 import { PageId, PageState } from "../store";
 import NavbarPageButton from "./navbar-page-button";
-import './mobile-navbar.scss';
+import './mobile-bottom-navbar.scss';
 
 interface Props
 {
@@ -10,14 +10,14 @@ interface Props
     readonly onPageChange: (page: PageState) => void;
 }
 
-export default class MobileNavbar extends ClassComponent<Props>
+export default class MobileBottomNavbar extends ClassComponent<Props>
 {
     public render()
     {
         const { pages, selectedPageId } = this.props;
 
-        return <nav class='mobile-navbar'>
-            <div class='mobile-navbar__page-buttons'>
+        return <nav class='mobile-bottom-navbar'>
+            <div class='mobile-bottom-navbar__page-buttons'>
                 { pages.map(page => <NavbarPageButton active={page.id === selectedPageId} page={page} onClick={this.onClickPage} />) }
             </div>
         </nav>

@@ -9,6 +9,12 @@
     opacity: 0;
     max-width: 96rem;
 
+    &__content {
+        >h2 {
+            margin-bottom: 0.5rem;
+        }
+    }
+
     &.mounted {
         transform: translateX(0);
         opacity: 1;

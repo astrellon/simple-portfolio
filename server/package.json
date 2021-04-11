@@ -8,6 +8,7 @@
     "prod": "npm install && npm run startServer",
     "startServer": "ts-node ./src/index.ts --jsx",
     "buildClient": "rm -rf ./clientDeploy/ && parcel build -d ./clientDeploy ./src/client/index.html",
+    "buildClientTreeShake": "rm -rf ./clientDeploy/ && parcel build --experimental-scope-hoisting -d ./clientDeploy ./src/client/index.html",
     "build": "npm run buildClient"
   },
   "author": "Alan Lawrey",
@@ -31,8 +32,7 @@
     "simple-signals": "^1.0.1",
     "simple-tsx-vdom": "^0.7.0",
     "simple-tsx-vdom-hydration": "^0.1.6",
-    "simple-tsx-vdom-ssr": "^0.2.2",
-    "smoothscroll-polyfill": "^0.4.4"
+    "simple-tsx-vdom-ssr": "^0.2.2"
   },
   "browserslist": [
     "defaults",

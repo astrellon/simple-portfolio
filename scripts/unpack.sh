@@ -3,7 +3,7 @@
 ROOT=server
 TARGET=$ROOT/server
 
-rm -rf ${TARGET}
+# rm -rf ${TARGET}
 mkdir -p ${TARGET}
 
 tar -xzf server.tar.gz -C ${TARGET}

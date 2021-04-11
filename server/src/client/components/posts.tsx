@@ -1,5 +1,6 @@
 import { ClassComponent, FinishUnmountHandler, vdom } from "simple-tsx-vdom";
 import { PageState, PostState, setPostsHeight, store } from "../store";
+import { Footer } from "./footer";
 import { Post } from "./post";
 import './posts.scss';
 
@@ -57,6 +58,7 @@ export class Posts extends ClassComponent<Props>
             <div class='posts__content'>
                 { category && <h2>{category.title}</h2> }
                 {posts && posts.map(post => <Post key={post.id} post={post} />)}
+                <Footer />
             </div>
         </div>
     }

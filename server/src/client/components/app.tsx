@@ -9,22 +9,17 @@ import { Navbar } from "./navbar";
 import { Posts } from "./posts";
 import RipplesComp from "./ripples-comp";
 import { AllIcons } from "./icon";
-import MobileNavbar from "./mobile-navbar";
-import smoothscroll from "smoothscroll-polyfill"
+import MobileBottomNavbar from "./mobile-bottom-navbar";
+import MobileTopNavbar from "./mobile-top-navbar";
 
 interface Props
 {
     readonly state: State;
 }
 
-if (typeof(window) !== 'undefined')
-{
-    smoothscroll.polyfill();
-}
-
 export const App: FunctionalComponent<Props> = (props: Props) =>
 {
-    const { pages, posts, selectedPageId, darkTheme, postsHeight, isMobile, ripplesEnabled, backgrounds } = props.state;
+    const { pages, posts, selectedPageId, darkTheme, isMobile, ripplesEnabled, backgrounds } = props.state;
 
     // The extra div around posts is for handling the unmounting stage and we don't want the old posts to be suddenly after the footer (which would push it up).
 
@@ -38,12 +33,18 @@ export const App: FunctionalComponent<Props> = (props: Props) =>
                 darkTheme={darkTheme}
                 ripplesEnabled={ripplesEnabled} /> }
 
-            <div class='container'>
+            { isMobile && <MobileTopNavbar
+                darkTheme={darkTheme}
+                ripplesEnabled={ripplesEnabled} /> }
+
+            <div class='container app__post-container'>
                 <Posts key={selectedPageId} category={pages.find(c => c.id === selectedPageId)} posts={posts[selectedPageId]} />
             </div>
-            <div class='app__spacer' style={{'min-height': postsHeight + 'px'}}/>
-            { isMobile && <div class='app__mobile-spacer'/> }
-            { isMobile && <MobileNavbar selectedPageId={selectedPageId} pages={pages} onPageChange={onPageChange} /> }
+
+            { isMobile && <MobileBottomNavbar
+                selectedPageId={selectedPageId}
+                pages={pages}
+                onPageChange={onPageChange} /> }
         </main>
 
         { ripplesEnabled &&
@@ -59,24 +60,5 @@ function onPageChange(page: PageState)
     }
 
     window.history.pushState(pushedState, page.title, `/${page.id}`);
-    window.scroll({
-        behavior: 'smooth',
-        left: 0,
-        top: 0
-    });
-
-    scrollCheckTo(page.id);
-}
-
-function scrollCheckTo(pageId: PageId)
-{
-    const scrollTop = document.body.parentElement?.scrollTop || 0;
-    if (Math.abs(scrollTop) < 5)
-    {
-        store.execute(setSelectedPageId(pageId));
-    }
-    else
-    {
-        setTimeout(() => scrollCheckTo(pageId), 10);
-    }
+    store.execute(setSelectedPageId(page.id));
 }
