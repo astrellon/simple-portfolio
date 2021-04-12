@@ -6,9 +6,10 @@ Type=simple
 Restart=always
 RestartSec=5
 Environment="NODE_ENV=production"
-Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 WorkingDirectory=/home/ubuntu/server/server
 ExecStart="/home/ubuntu/server/server/start.sh"
+ExecStop="/usr/bin/killall node"
 TimeoutSec=300
 
 [Install]
