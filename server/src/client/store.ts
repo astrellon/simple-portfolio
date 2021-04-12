@@ -22,11 +22,18 @@ export interface PageStored extends PageState
     readonly defaultPage?: boolean;
 }
 
+export interface ImageDimension
+{
+    readonly width: number;
+    readonly height: number;
+}
+
 export interface PostPictureState
 {
     readonly url: Url;
     readonly fullSizeUrl?: Url;
     readonly caption: string;
+    readonly dimension?: ImageDimension;
 }
 
 export interface PostLinkState

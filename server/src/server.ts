@@ -4,11 +4,12 @@ import * as path from "path";
 import * as cookie from "cookie";
 import { exec } from "child_process";
 import DataStore, { Modifier } from "simple-data-store";
-import { State, DataStored, clearLoadedData, PostStateMap } from "./client/store";
+import { State, DataStored, clearLoadedData, PostStateMap, PostStored, PostPictureState } from "./client/store";
 import HttpServer from "./http-server";
 import PageRenderer from "./page-renderer";
 import { ServerConfig } from "./server-config";
 import { Editable } from "./client/common-types";
+import sizeOf from "image-size";
 
 const deviceDetector = new DeviceDetector({
     skipBotDetection: true
@@ -109,7 +110,7 @@ export default class Server
                 {
                     res.setHeader('Content-Type', 'application/octet-stream');
                 }
-                res.setHeader("Cache-Control", "max-age=3600");
+                res.setHeader("Cache-Control", "max-age=86400");
 
                 res.writeHead(200);
                 res.end(data);
@@ -132,7 +133,7 @@ export default class Server
                     res.setHeader('Content-Type', 'image/x-icon');
                 }
 
-                res.setHeader("Cache-Control", "max-age=3600");
+                res.setHeader("Cache-Control", "max-age=86400");
 
                 res.writeHead(200);
                 res.end(data);
@@ -175,7 +176,7 @@ export default class Server
                 {
                     res.setHeader('Content-Type', 'application/octet-stream');
                 }
-                res.setHeader("Cache-Control", "max-age=3600");
+                res.setHeader("Cache-Control", "max-age=86400");
 
                 res.writeHead(200);
                 res.end(data);
@@ -295,8 +296,9 @@ function addData(newData: DataStored[]): Modifier<State>
                 {
                     posts = { ...posts };
                 }
-                const list = posts[data.pageId] || (posts[data.pageId] = [])
-                list.push(data);
+                const list = posts[data.pageId] || (posts[data.pageId] = []);
+                const processedData = processPostImages(data);
+                list.push(processedData);
             }
             else if (data.type === 'background')
             {
@@ -321,4 +323,35 @@ function addData(newData: DataStored[]): Modifier<State>
 
         return { pages, posts, selectedPageId, backgrounds }
     }
+}
+
+function processPostImages(post: PostStored)
+{
+    const newPost: Editable<PostStored> = JSON.parse(JSON.stringify(post)) as PostStored;
+
+    for (const content of newPost.contents)
+    {
+        if (!content.pictures)
+        {
+            continue;
+        }
+
+        for (const picture of content.pictures)
+        {
+            if (!picture.dimension)
+            {
+                const size = sizeOf('.' + picture.url);
+                if (size.width && size.height && size.width > 0 && size.height > 0)
+                {
+                    console.log('Image size: ', picture.url, ': ', size);
+                    (picture as Editable<PostPictureState>).dimension = {
+                        width: size.width,
+                        height: size.height
+                    }
+                }
+            }
+        }
+    }
+
+    return newPost;
 }
