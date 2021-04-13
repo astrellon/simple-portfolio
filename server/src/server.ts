@@ -192,21 +192,55 @@ export default class Server
                 return;
             }
 
-            console.log('Webhook request');
-            this.downloadFromGit()
-                .then(() =>
+            let body = '';
+
+            req.on('data', (chunk =>
+            {
+                console.log('Webhook data');
+                body += chunk;
+            }));
+
+            req.on('end', () =>
+            {
+                fs.writeFileSync('webhook.json', body);
+
+                try
                 {
-                    console.log('Updating from new downloaded data');
-                    this.loadFromData();
-                    res.writeHead(200);
-                    res.end();
-                })
-                .catch(() =>
+                    if (body.startsWith("payload="))
+                    {
+                        const parsedBody = JSON.parse(unescape(body.substr("payload=".length)));
+                        const ref: string = parsedBody.ref;
+                        if (!ref.endsWith(this.config.gitRepoBranch))
+                        {
+                            res.writeHead(200);
+                            res.end();
+                            return;
+                        }
+                    }
+                }
+                catch
                 {
-                    console.error('Failed to get new data');
                     res.writeHead(500);
                     res.end();
-                });
+                    return;
+                }
+
+                console.log('Webhook request');
+                this.downloadFromGit()
+                    .then(() =>
+                    {
+                        console.log('Updating from new downloaded data');
+                        this.loadFromData();
+                        res.writeHead(200);
+                        res.end();
+                    })
+                    .catch(() =>
+                    {
+                        console.error('Failed to get new data');
+                        res.writeHead(500);
+                        res.end();
+                    });
+            });
         });
 
         this.httpServer.registerRoute('/', (req, res) =>
