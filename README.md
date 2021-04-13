@@ -176,6 +176,10 @@ and defaults the following:
 }
 ```
 
+## Attributions
+
+The ripples background effect is based off sirxemic's [jQuery Ripples Plugin](https://github.com/sirxemic/jquery.ripples/).
+
 # Licence
 
 MIT
