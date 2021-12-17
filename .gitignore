@@ -4,7 +4,7 @@
 /**/deploy/
 /**/.cache/
 /**/clientDeploy/
-/server/assets/
-/server/data/
+/server/assets
+/server/data
 /**/*.pem
 /**/*.tar.gz

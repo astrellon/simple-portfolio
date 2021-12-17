@@ -12,25 +12,12 @@ export class PostPicture extends ClassComponent<Props>
 {
     public render()
     {
-        const { url, caption, dimension } = this.props.picture;
+        const { url, fullSizeUrl, caption } = this.props.picture;
 
-        const extraProps: { [key: string]: any } = {};
-        if (dimension)
-        {
-            const aspectRatio = dimension.width / dimension.height;
-            let width = 360;
-            let height = width / aspectRatio;
-            if (height > 420)
-            {
-                height = 420;
-                width = height * aspectRatio;
-            }
-            extraProps.width = width;
-            extraProps.height = height;
-        }
+        const imgElement = <img loading='lazy' src={url} alt={caption} />;
 
         return <div class='post-picture' onmouseenter={this.onMouseEnter} onmouseleave={this.onMouseLeave}>
-            <img loading='lazy' src={url} alt={caption} {...extraProps} />
+            { fullSizeUrl ? <a href={fullSizeUrl} target='_blank'>{imgElement}</a> : imgElement }
             {caption && <div class='post-picture__caption'>{caption}</div>}
         </div>
     }

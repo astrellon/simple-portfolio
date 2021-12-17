@@ -5,7 +5,11 @@
 
     width: 360px;
 
-    &>img {
+    &>a {
+        opacity: 1;
+    }
+
+    &>img,&>a>img {
         width: 100%;
         max-height: 420px;
     }
