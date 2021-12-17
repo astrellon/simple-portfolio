@@ -12,10 +12,10 @@ export default class PostLink extends ClassComponent<Props>
 {
     public render()
     {
-        const { url, icon } = this.props.link;
+        const { url, icon, title } = this.props.link;
 
         return <div class='post-link'>
-            <a href={url} target='_blank'>
+            <a href={url} target='_blank' title={title}>
                 <Icon icon={icon} />
             </a>
         </div>

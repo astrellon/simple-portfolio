@@ -40,6 +40,7 @@ export interface PostLinkState
 {
     readonly url: Url;
     readonly icon: string;
+    readonly title?: string;
 }
 
 export interface PostParagraphState
